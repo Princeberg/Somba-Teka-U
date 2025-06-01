@@ -116,7 +116,7 @@ export default function Login() {
           </div>
 
           <div className="forgot-password">
-            <a href="/reset-password" onClick={(e) => {
+            <Link href="/reset-password" onClick={(e) => {
               e.preventDefault();
               setResetEmail(email);
               setShowResetModal(true);
