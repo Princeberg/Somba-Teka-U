@@ -73,7 +73,7 @@ export default function About() {
               </ul>
             </div>
             <div className="col-lg-6">
-              <Image
+              <img
                 src="https://images.unsplash.com/photo-1680878903102-92692799ef36?q=80&w=2069&auto=format&fit=crop"
                 alt="Équipe Teka"
                 className="img-fluid rounded shadow"
