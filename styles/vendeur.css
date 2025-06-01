@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f9fafb;
+}
+
+.seller-container {
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 1000px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.seller-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 2rem;
+}
+
+.seller-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.seller-table th,
+.seller-table td {
+  padding: 0.75rem 1rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.seller-table th {
+  background-color: #10b981;
+  color: white;
+  font-weight: 600;
+  text-align: left;
+}
+
+.seller-table tr:hover {
+  background-color: #f3f4f6;
+}
+
+.status-active {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.status-inactive {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  .seller-container {
+    padding: 1rem;
+  }
+
+  .seller-title {
+    font-size: 1.5rem;
+  }
+
+  .seller-table th,
+  .seller-table td {
+    padding: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+}
