@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Header from '@/components/Header2';
-import { uploadImageToCloudinary } from './api/upload';
+import Header from '@/components/Header4';
+import { uploadImageToCloudinary } from '../api/upload';
+import useAuth from '@/lib/Auth';
 
 export default function AddProductPage() {
   const router = useRouter();
+  const { user, loading } = useAuth(); // ✅ Correction ici
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
   const [previews, setPreviews] = useState({});
@@ -15,73 +17,71 @@ export default function AddProductPage() {
     ville: '',
     productName: '',
     price: '',
-    sellerContact: '',
-    email: '',
     description: '',
-    sellerName: '',
-    WhatsappURL: '' 
   });
 
   const fileInputsRef = useRef([]);
 
+  if (loading) return <p>Chargement...</p>; // ✅ Affiche une attente
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleImageChange = async (e, index) => {
-  if (!e.target.files || e.target.files.length === 0) return;
+    if (!e.target.files || e.target.files.length === 0) return;
 
-  const file = e.target.files[0];
-  const fileName = file.name;
+    const file = e.target.files[0];
+    const fileName = file.name;
 
-  if (Object.values(previews).some(preview => preview.name === fileName)) {
-    setError(`L'image ${fileName} a déjà été sélectionnée`);
-    e.target.value = '';
-    return;
-  }
+    if (Object.values(previews).some((preview) => preview.name === fileName)) {
+      setError(`L'image ${fileName} a déjà été sélectionnée`);
+      e.target.value = '';
+      return;
+    }
 
-  if (file.size > 5 * 1024 * 1024) {
-    setError("L'image dépasse la taille maximale de 5MB");
-    e.target.value = '';
-    return;
-  }
+    if (file.size > 5 * 1024 * 1024) {
+      setError("L'image dépasse la taille maximale de 5MB");
+      e.target.value = '';
+      return;
+    }
 
-  const reader = new FileReader();
-  reader.onload = (event) => {
-    setPreviews(prev => ({
-      ...prev,
-      [index]: {
-        url: event.target.result,
-        name: fileName
-      }
-    }));
-    setError(null);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      setPreviews((prev) => ({
+        ...prev,
+        [index]: {
+          url: event.target.result,
+          name: fileName,
+        },
+      }));
+      setError(null);
+    };
+    reader.readAsDataURL(file);
+
+    try {
+      const result = await uploadImageToCloudinary(file, index);
+      setUploadedUrls((prev) => ({
+        ...prev,
+        [index]: result.url,
+      }));
+    } catch (uploadError) {
+      setError("Erreur lors de l'upload de l'image");
+      e.target.value = '';
+    }
   };
-  reader.readAsDataURL(file);
 
-  try {
-    setError(null);
-    const result = await uploadImageToCloudinary(file, index);
-    setUploadedUrls(prev => ({
-      ...prev,
-      [index]: result.url // tu peux aussi stocker public_id ici si besoin
-    }));
-  } catch (uploadError) {
-    setError("Erreur lors de l'upload de l'image");
-    e.target.value = '';
-  }
-};
   const removeImage = (index) => {
-    setPreviews(prev => {
+    setPreviews((prev) => {
       const newPreviews = { ...prev };
       delete newPreviews[index];
       return newPreviews;
     });
-    setUploadedUrls(prev => {
+    setUploadedUrls((prev) => {
       const newUrls = { ...prev };
       delete newUrls[index];
       return newUrls;
@@ -92,63 +92,67 @@ export default function AddProductPage() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-  setError(null);
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
 
-  const missingFields = [];
-  if (!formData.categorie) missingFields.push('Catégorie');
-  if (!formData.productName) missingFields.push('Nom du produit');
-  if (!formData.price) missingFields.push('Prix');
-  if (!formData.ville) missingFields.push('Ville');
-  if (!formData.email) missingFields.push('Email');
-  if (Object.keys(uploadedUrls).length < 3) missingFields.push('Au moins 3 images');
-
-  if (missingFields.length > 0) {
-    setError(`Champs requis manquants ou invalides : ${missingFields.join(', ')}`);
-    setIsSubmitting(false);
-    return;
-  }
-
-  const orderedUrls = Object.entries(uploadedUrls)
-    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
-    .map(entry => entry[1]);
-
-  const payload = {
-    ...formData,
-    productPicture1: orderedUrls[0] || null,
-    productPicture2: orderedUrls[1] || null,
-    productPicture3: orderedUrls[2] || null,
-  };
-
-  try {
-    const response = await fetch('/api/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-
-    const result = await response.json();
-
-    if (!response.ok) {
-      if (response.status === 422 && result.errors) {
-        console.error("Validation Errors:", result.errors);
-        setError(result.errors.join(', '));
-      } else {
-        setError(result.message || "Une erreur inconnue est survenue");
-      }
+    if (!user || !user.id) {
+      setError("Vous devez être connecté pour ajouter un produit");
       setIsSubmitting(false);
       return;
     }
 
-    router.push('/confirm');
-  } catch (err) {
-    setError(err.message || "Une erreur s'est produite lors de la soumission");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
+    const missingFields = [];
+    if (!formData.categorie) missingFields.push('Catégorie');
+    if (!formData.productName) missingFields.push('Nom du produit');
+    if (!formData.price) missingFields.push('Prix');
+    if (!formData.ville) missingFields.push('Ville');
+    if (Object.keys(uploadedUrls).length < 3) missingFields.push('Au moins 3 images');
 
+    if (missingFields.length > 0) {
+      setError(`Champs requis manquants ou invalides : ${missingFields.join(', ')}`);
+      setIsSubmitting(false);
+      return;
+    }
+
+    const orderedUrls = Object.entries(uploadedUrls)
+      .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+      .map((entry) => entry[1]);
+
+    const payload = {
+      ...formData,
+      id_user: user.id,
+      productPicture1: orderedUrls[0] || null,
+      productPicture2: orderedUrls[1] || null,
+      productPicture3: orderedUrls[2] || null,
+    };
+
+    try {
+      const response = await fetch('../api/demande', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 422 && result.errors) {
+          console.error("Validation Errors:", result.errors);
+          setError(result.errors.join(', '));
+        } else {
+          setError(result.message || "Une erreur inconnue est survenue");
+        }
+        return;
+      }
+
+      router.push('/boutique/confirm');
+    } catch (err) {
+      setError(err.message || "Une erreur s'est produite lors de la soumission");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <>
       <Head>
@@ -159,9 +163,9 @@ export default function AddProductPage() {
 
       <Header/>
       
-      <div className="container">
+      <div className="container" style={{marginTop:'80px'}}>
         <div className="form-container">
-            <h3>Demande d'ajout d'un Nouveau Produit</h3>
+            <h3>Ajout d'un Nouveau Produit</h3>
             <p className="form-subtitle">Remplissez ce formulaire pour ajouter votre produit à notre plateforme</p>
           </div>
           
@@ -264,45 +268,6 @@ export default function AddProductPage() {
                 </div>
               </div>
 
-              {/* Contact du vendeur */}
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="sellerContact" className="required-field">Contact du Vendeur</label>
-                  <div className="input-group">
-                    <span className="input-group-text">+242</span>
-                    <input 
-                      type="number" 
-                      id="sellerContact" 
-                      name="sellerContact"
-                      className="form-control" 
-                      required 
-                      placeholder="Ex: 060000000"
-                      value={formData.sellerContact}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <small className="form-text">Numéro sans indicatif pays</small>
-                </div>
-              </div>
-
-              {/* Email */}
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="email" className="required-field">Email</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email"
-                    className="form-control" 
-                    required 
-                    placeholder="Ex: contact@exemple.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                  />
-                  <small className="form-text">Nous ne partagerons jamais votre email</small>
-                </div>
-              </div>
-
               {/* Description du produit */}
               <div className="col-12">
                 <div className="form-group">
@@ -317,45 +282,6 @@ export default function AddProductPage() {
                     value={formData.description}
                     onChange={handleInputChange}
                   />
-                </div>
-              </div>
-
-              {/* Infos vendeur */}
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="sellerName" className="required-field">Nom du vendeur</label>
-                  <input 
-                    type="text" 
-                    id="sellerName" 
-                    name="sellerName"
-                    className="form-control" 
-                    required 
-                    placeholder="Ex: Jean Dupont"
-                    value={formData.sellerName}
-                    onChange={handleInputChange}
-                  />
-                </div>
-              </div>
-
-              <div className="col-md-6">
-                <div className="form-group">
-                  <label htmlFor="WhatsappURL" className="required-field">Contact WhatsApp</label>
-                  <div className="input-group">
-                    <span className="input-group-text">
-                      <i className="fab fa-whatsapp"></i>
-                    </span>
-                    <input 
-                      type="text" 
-                      id="WhatsappURL" 
-                      name="WhatsappURL"
-                      className="form-control" 
-                      required 
-                      placeholder="+242000000000"
-                      value={formData.WhatsappURL}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                  <small className="form-text">Format: +242000000000</small>
                 </div>
               </div>
 
@@ -427,7 +353,7 @@ export default function AddProductPage() {
                     required 
                   />
                   <label className="form-check-label" htmlFor="termsCheck">
-                    J'accepte les <a href="/terms" className="terms-link">conditions d'utilisation</a>
+                    J'accepte les <a href="./terms" className="terms-link">conditions d'utilisation</a>
                   </label>
                 </div>
               </div>
@@ -447,7 +373,7 @@ export default function AddProductPage() {
                   ) : (
                     <>
                       <i className="fas fa-paper-plane me-2"></i> 
-                      <span className="btn-text">Soumettre la demande</span>
+                      <span className="btn-text">Envoyer le produit </span>
                     </>
                   )}
                 </button>

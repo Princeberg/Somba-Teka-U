@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import supabase from '@/lib/supabase'; 
+import supabase from '@/lib/supabase';
 import Head from 'next/head';
-import Header from '@/components/Header3';
+import Header from '@/components/Header4';
 import 'aos/dist/aos.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function AdminMenu() {
   const router = useRouter();
   const [userEmail, setUserEmail] = useState('');
+  const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     pendingRequests: 0,
@@ -24,29 +25,23 @@ export default function AdminMenu() {
         router.push('/');
       } else {
         setUserEmail(user.email);
-        fetchStats();
+        setUserId(user.id);
+        await fetchStats(user.id);
         setLoading(false);
       }
     };
 
-    const fetchStats = async () => {
+    const fetchStats = async (sellerId) => {
       try {
-        const { count: pendingRequests } = await supabase
-          .from('requests')
-          .select('*', { count: 'exact', head: true });
-
         const { count: activeProducts } = await supabase
-          .from('products')
-          .select('*', { count: 'exact', head: true });
-
-        const { count: activeSellers } = await supabase
-          .from('sellers')
+          .from('produits')
           .select('*', { count: 'exact', head: true })
+          .eq('id_seller', sellerId); 
+
 
         setStats({
-          pendingRequests: pendingRequests || 0,
           activeProducts: activeProducts || 0,
-          activeSellers: activeSellers || 0
+          activeSellers: 1 
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -62,7 +57,7 @@ export default function AdminMenu() {
       alert("Une erreur s'est produite lors de la déconnexion.");
       console.error("Logout error:", error);
     } else {
-      router.push('/home');
+      router.push('/');
     }
   };
 
@@ -79,7 +74,7 @@ export default function AdminMenu() {
   return (
     <>
       <Head>
-        <title>Tableau de bord Admin - SOMBATEKA</title>
+        <title>Vendeur</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="author" content="SOMBATEKA" />
         <meta name="description" content="Tableau de bord administrateur SOMBATEKA" />
@@ -106,7 +101,7 @@ export default function AdminMenu() {
           {/* Admin Header with Stats */}
           <div className="admin-header">
             <div className="header-content">
-              <h1>Tableau de bord Administrateur</h1>
+              <h1>Tableau de bord Vendeur</h1>
               <p>Somba-Teka</p>
             </div>
             <div className="user-info">
@@ -125,35 +120,13 @@ export default function AdminMenu() {
           {/* Stats Cards Row - Centered and Responsive */}
           <div className="row stats-row justify-content-center">
             <div className="col-lg-3 col-md-6 mb-4">
-              <div className="stat-card stat-card-primary">
-                <div className="stat-icon">
-                  <i className="fas fa-clock"></i>
-                </div>
-                <div className="stat-content">
-                  <h3>{stats.pendingRequests}</h3>
-                  <p>Demandes en attente</p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 mb-4">
               <div className="stat-card stat-card-success">
                 <div className="stat-icon">
                   <i className="fas fa-check-circle"></i>
                 </div>
                 <div className="stat-content">
                   <h3>{stats.activeProducts}</h3>
-                  <p>Total produits </p>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-3 col-md-6 mb-4">
-              <div className="stat-card stat-card-warning">
-                <div className="stat-icon">
-                  <i className="fas fa-store"></i>
-                </div>
-                <div className="stat-content">
-                  <h3>{stats.activeSellers}</h3>
-                  <p>Vendeurs actifs</p>
+                  <p> Total produits </p>
                 </div>
               </div>
             </div>
@@ -167,13 +140,13 @@ export default function AdminMenu() {
 
           <div className="row quick-actions justify-content-center">
             <div className="col-lg-4 col-md-6 mb-4">
-              <div className="card card-primary h-100" onClick={() => router.push('/admin/ajout')}>
+              <div className="card card-primary h-100" onClick={() => router.push('/boutique/demande')}>
                 <div className="card-body">
                   <div className="card-icon">
                     <i className="fas fa-plus-circle"></i>
                   </div>
-                  <h5 className="card-title">Demandes d'ajout</h5>
-                  <p className="card-text">Gérez les demandes de nouveaux produits soumises par les vendeurs</p>
+                  <h5 className="card-title">Ajouter un produit</h5>
+                  <p className="card-text">Ajouter des nouveaux produits </p>
                   <div className="card-footer">
                     <button className="btn btn-admin btn-admin-primary">
                       Accéder <i className="fas fa-arrow-right"></i>
@@ -184,13 +157,13 @@ export default function AdminMenu() {
             </div>
 
             <div className="col-lg-4 col-md-6 mb-4">
-              <div className="card card-success h-100" onClick={() => router.push('/admin/view')}>
+              <div className="card card-success h-100" onClick={() => router.push('/boutique/view')}>
                 <div className="card-body">
                   <div className="card-icon">
                     <i className="fas fa-boxes"></i>
                   </div>
                   <h5 className="card-title">Gestion des produits</h5>
-                  <p className="card-text">Visualisez et modifiez tous les produits disponibles sur la plateforme</p>
+                  <p className="card-text"> Booster et modifier tous vos produits disponibles sur la platforme. </p>
                   <div className="card-footer">
                     <button className="btn btn-admin btn-admin-primary">
                       Accéder <i className="fas fa-arrow-right"></i>
@@ -200,22 +173,6 @@ export default function AdminMenu() {
               </div>
             </div>
 
-            <div className="col-lg-4 col-md-6 mb-4">
-              <div className="card card-warning h-100" onClick={() => router.push('/admin/vendeur')}>
-                <div className="card-body">
-                  <div className="card-icon">
-                    <i className="fas fa-users"></i>
-                  </div>
-                  <h5 className="card-title">Gestion des vendeurs</h5>
-                  <p className="card-text">Approuvez ou supprimez les comptes vendeurs et suivez leurs performances</p>
-                  <div className="card-footer">
-                    <button className="btn btn-admin btn-admin-primary">
-                      Accéder <i className="fas fa-arrow-right"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </main>
       </div>

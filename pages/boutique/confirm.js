@@ -36,7 +36,7 @@ export default function Confirmation() {
          <p>Notre équipe traitera votre demande rapidement.</p>
 
        
-        <Link href="/" className="btn btn-success btn-lg">
+        <Link href="/boutique/menu" className="btn btn-success btn-lg">
           <i className="fas fa-arrow-left me-2"></i>
           Retour à l&apos;accueil
         </Link>

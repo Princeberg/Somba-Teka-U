@@ -55,18 +55,16 @@ export default function Header() {
   const translations = {
     en: {
       home: "Home",
-      sell: "Sell a product",
       ad: "Advertising",
       about: "About",
-      shopSpace: "Shop Space",
+      shopSpace: "Seller Space",
       language: "Language",
     },
     fr: {
       home: "Accueil",
-      sell: "Vendre un produit",
       ad: "Publicité",
       about: "À propos",
-      shopSpace: "Espace Boutique",
+      shopSpace: "Espace vendeur",
       language: "Langue",
     },
   };
@@ -78,7 +76,7 @@ export default function Header() {
       <header className="header">
         <div className="container">
           <div className="header-left">
-            <Link href="/login" legacyBehavior>
+            <Link href="#" legacyBehavior>
               <a className="logo" onClick={closeMenu}>
                 <span className="logo-main">SOMBA</span>
                 <span className="logo-accent">TEKA</span>
@@ -94,14 +92,6 @@ export default function Header() {
                     <a onClick={closeMenu} className="nav-link">
                       <FontAwesomeIcon icon={faHome} className="nav-icon" />
                       <span className="nav-text">{t.home}</span>
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/teka" legacyBehavior>
-                    <a onClick={closeMenu} className="nav-link">
-                      <FontAwesomeIcon icon={faStore} className="nav-icon" />
-                      <span className="nav-text">{t.sell}</span>
                     </a>
                   </Link>
                 </li>
@@ -152,7 +142,7 @@ export default function Header() {
               </div> */}
             </div>
 
-            <Link href="/coming-soon" legacyBehavior>
+            <Link href="/login" legacyBehavior>
               <a className="auth-button" onClick={closeMenu}>
                 <FontAwesomeIcon icon={faUser} className="auth-icon" />
                 <span>{t.shopSpace}</span>

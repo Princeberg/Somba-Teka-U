@@ -115,21 +115,21 @@ export default function Login() {
             />
           </div>
 
-          {/* <div className="forgot-password">
-            <a href="#" onClick={(e) => {
+          <div className="forgot-password">
+            <a href="/reset-password" onClick={(e) => {
               e.preventDefault();
               setResetEmail(email);
               setShowResetModal(true);
             }}>
               Mot de passe oublié ?
             </a>
-          </div> */}
+          </div>
 
           <button type="submit" className="login-button">Se connecter</button>
 
-          {/* <div className="signup-link">
-            Pas encore de boutique ? <a href="/register">S'inscrire</a>
-          </div> */}
+          <div className="signup-link">
+            Pas encore de compte ? <a href="/register">S'inscrire</a> 
+          </div>
         </form>
 
         {/* Password Reset Modal */}
