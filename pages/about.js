@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import Header from "@/components/Header2";
 import { useEffect } from 'react';
 import AOS from 'aos';
@@ -114,7 +113,7 @@ export default function About() {
             ].map((member, i) => (
               <div key={i} className="col-md-4 mb-4">
                 <div className="about-card text-center">
-                  <Image
+                  <img
                     src="/images/profile-1.jpg"
                     alt={`Membre ${member.name}`}
                     width={120}

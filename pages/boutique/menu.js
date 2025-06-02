@@ -9,14 +9,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 export default function AdminMenu() {
   const router = useRouter();
   const [userEmail, setUserEmail] = useState('');
-  const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     activeProducts: 0,
     activeSellers: 0,
   });
 
-  // ✅ Déclare fetchStats AVANT checkAuth
+  
   const fetchStats = async (sellerId) => {
     try {
       const { count: activeProducts } = await supabase
@@ -34,22 +33,17 @@ export default function AdminMenu() {
   };
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-
-      if (error || !user) {
-        router.push('/');
-      } else {
-        setUserEmail(user.email);
-        setUserId(user.id);
-        await fetchStats(user.id);
-        setLoading(false);
-      }
-    };
-
+      const checkAuth = async () => {
+        const { data: { user }, error } = await supabase.auth.getUser();
+  
+        if (error || !user) {
+          router.push('/');
+        } else {
+          setUserEmail(user.email);
+          fetchStats();
+          setLoading(false);
+        }
+      };
     checkAuth();
   }, [router]);
 

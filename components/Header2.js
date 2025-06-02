@@ -4,12 +4,9 @@ import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHome,
-  faStore,
   faBullhorn,
   faInfoCircle,
   faUser,
-  faSun,
-  faMoon,
 } from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
@@ -22,12 +19,6 @@ export default function Header() {
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
-  const toggleDarkMode = () => {
-    const newMode = !darkMode;
-    setDarkMode(newMode);
-    localStorage.setItem("darkMode", newMode ? "enabled" : "disabled");
-    updateDarkMode(newMode);
-  };
 
   const updateDarkMode = (isDark) => {
     if (typeof window !== "undefined") {
@@ -35,11 +26,6 @@ export default function Header() {
     }
   };
 
-  const changeLanguage = (lang) => {
-    setLanguage(lang);
-    localStorage.setItem("language", lang);
-    router.push(pathname, asPath, { locale: lang });
-  };
 
   useEffect(() => {
     const savedMode = localStorage.getItem("darkMode");

@@ -187,7 +187,7 @@ const TermsPage = () => {
             <h2>6. Propriété Intellectuelle</h2>
             <ul>
               <li>Tous les contenus de la plateforme sont protégés par le droit d&apos;auteur</li>
-              <li>Les marques "SOMBA TEKA" sont la propriété exclusive de la société</li>
+              <li>Les marques SOMBA TEKA sont la propriété exclusive de la société</li>
               <li>Les utilisateurs conservent les droits sur leurs contenus publiés</li>
             </ul>
 

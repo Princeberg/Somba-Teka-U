@@ -3,11 +3,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faHome,
-  faStore,
-  faBullhorn,
-  faInfoCircle,
-  faUser,
   faSun,
   faMoon,
   faRightFromBracket,

@@ -76,7 +76,7 @@ export default function FeaturedAds() {
           onMouseOver={(e) => e.currentTarget.style.backgroundColor = "rgba(25, 25, 40, 0.85)"}
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = " #4CAF50"}
         >
-          Voir plus d'annonces publicitaires
+          Voir plus 
         </Link>
       </div>
 

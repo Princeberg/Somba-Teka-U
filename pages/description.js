@@ -12,7 +12,6 @@ export default function ProductDescription() {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [theme, setTheme] = useState('light');
   const [modalImage, setModalImage] = useState('');
   const [showModal, setShowModal] = useState(false);
 

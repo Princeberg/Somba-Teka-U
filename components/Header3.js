@@ -7,7 +7,6 @@ import {
   faStore,
   faBullhorn,
   faInfoCircle,
-  faUser,
   faSun,
   faMoon,
   faRightFromBracket,

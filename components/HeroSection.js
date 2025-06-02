@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function HeroSection() {
   return (
     <section className="hero">
@@ -8,15 +10,15 @@ export default function HeroSection() {
           à Brazzaville et ses environs.
         </h5>
         <div className="btn-container">
-          <a href="/somba" className="btn btn-primary">
+          <Link href="/somba" className="btn btn-primary">
             <i className="fas fa-shopping-cart me-2"></i> Acheter des articles
-          </a>
-          <a href="/seka" className="btn btn-outline">
+          </Link>
+          <Link href="/seka" className="btn btn-outline">
             <i className="fas fa-shop me-2"></i> Vendre des articles
-          </a>
-          <a href="/login" className="btn btn-primary">
+          </Link>
+          <Link href="/login" className="btn btn-primary">
             <i className="fas fa-cogs me-2"></i> Gérer ma boutique
-          </a>
+          </Link>
         </div>
       </div>
     </section>

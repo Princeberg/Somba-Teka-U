@@ -67,7 +67,7 @@ export default function Ajout() {
   if (!confirm("Êtes-vous sûr de vouloir approuver ce produit ?")) return;
   try {
     // Récupérer la demande
-    const { data: product, error: fetchError } = await supabase
+    const {  error: fetchError } = await supabase
       .from('requests')
       .select('*')
       .eq('id', productId)
