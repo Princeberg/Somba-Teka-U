@@ -1,12 +1,5 @@
- :root {
-            --primary-color: #4e54c8;
-            --secondary-color: #8f94fb;
-            --dark-color: #1a1a2e;
-            --light-color: #f8f9fa;
-            --accent-color: #ff7e5f;
-        }
-        
-        body {
+
+              body {
             color: white;
             min-height: 100vh;
             margin: 0;
@@ -16,7 +9,7 @@
         }
         
         body::before {
-            content: '';
+           
             position: absolute;
             top: 0;
             left: 0;

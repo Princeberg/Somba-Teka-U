@@ -1,12 +1,4 @@
-:root {
-  --secondary-color: #f8f9fc;
-  --dark-bg: #121212;
-  --card-bg: #ffffff;
-  --text-dark: #343a40;
-  --text-light: #f8f9fa;
-  --accent-color: #4CAF50;
-  --border-color: #dddfeb;
-}
+
 
 body {
   background-color: var(--dark-bg);

@@ -1,18 +1,9 @@
-:root {
-      --primary:  #4CAF50;
-      --secondary: #1D3557;
-      --accent: #F1C40F;
-      --dark: #0A100D;
-      --light: #F8F9FA;
-      --gray: #6C757D;
-      --link-color: #1D3557;
-    }
-    
-    * {
+
+        /* * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
+    } */
     
     body {
       font-family: 'Inter', sans-serif;
@@ -152,7 +143,7 @@
 }
     
     .section-title:after {
-      content: '';
+     
       position: absolute;
       bottom: -10px;
       left: 50%;

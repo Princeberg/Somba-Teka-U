@@ -1,12 +1,4 @@
-:root {
-      --primary:  #4CAF50;
-      --secondary: #1D3557;
-      --accent: #F1C40F;
-      --dark: #0A100D;
-      --light: #F8F9FA;
-      --gray: #6C757D;
-      --link-color: #1D3557;
-    }
+
 body {
             font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -108,7 +100,6 @@ body {
         }
 
         .divider::before, .divider::after {
-            content: "";
             flex: 1;
             border-bottom: 1px solid #ecf0f1;
         }

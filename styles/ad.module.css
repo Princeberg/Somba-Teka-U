@@ -1,16 +1,3 @@
- :root {
-      --primary-color: #E63946;
-      --secondary-color: #1D3557;
-      --accent-color: #A8DADC;
-      --light-color: #F1FAEE;
-      --dark-color: #121212;
-      --text-light: #333;
-      --text-dark: #F1FAEE;
-      --background-light: #FFFFFF;
-      --background-dark: #121212;
-      --transition: all 0.3s ease;
-      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
 
     * {
       margin: 0;

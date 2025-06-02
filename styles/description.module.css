@@ -1,18 +1,4 @@
-:root {
-          --primary-color: #4CAF50;
-          --primary-hover: #4CAF50;
-          --secondary-color: #457b9d;
-          --background-color: #f8f9fa;
-          --text-color: #333333;
-          --text-light: #6c757d;
-          --border-color: #e0e0e0;
-          --card-bg: #ffffff;
-          --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-          --shadow-hover: 0 8px 25px rgba(0, 0, 0, 0.12);
-          --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-          --radius: 12px;
-          --spacing: 8px;
-        }
+
 
         [data-theme="dark"] {
           --primary-color: white;
