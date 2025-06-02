@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import Link from "next/link";
 import "swiper/css/pagination";
 
 export default function FeaturedAds() {
@@ -55,7 +56,7 @@ export default function FeaturedAds() {
       </Swiper>
 
       <div style={{ display: "flex", justifyContent: "center", marginTop: "30px" }}>
-        <a 
+        <Link
           href="/ad" 
           className="request-btn"
           style={{
@@ -76,7 +77,7 @@ export default function FeaturedAds() {
           onMouseOut={(e) => e.currentTarget.style.backgroundColor = " #4CAF50"}
         >
           Voir plus d'annonces publicitaires
-        </a>
+        </Link>
       </div>
 
       {modalData.visible && (

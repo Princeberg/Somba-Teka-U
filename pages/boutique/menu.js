@@ -9,16 +9,36 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 export default function AdminMenu() {
   const router = useRouter();
   const [userEmail, setUserEmail] = useState('');
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
     activeProducts: 0,
-    activeSellers: 0
+    activeSellers: 0,
   });
+
+  // ✅ Déclare fetchStats AVANT checkAuth
+  const fetchStats = async (sellerId) => {
+    try {
+      const { count: activeProducts } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true })
+        .eq('id_seller', sellerId);
+
+      setStats({
+        activeProducts: activeProducts || 0,
+        activeSellers: 1,
+      });
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
 
   useEffect(() => {
     const checkAuth = async () => {
-      const { data: { user }, error } = await supabase.auth.getUser();
+      const {
+        data: { user },
+        error,
+      } = await supabase.auth.getUser();
 
       if (error || !user) {
         router.push('/');
@@ -30,23 +50,6 @@ export default function AdminMenu() {
       }
     };
 
-    const fetchStats = async (sellerId) => {
-      try {
-        const { count: activeProducts } = await supabase
-          .from('products')
-          .select('*', { count: 'exact', head: true })
-          .eq('id_seller', sellerId); 
-
-
-        setStats({
-          activeProducts: activeProducts || 0,
-          activeSellers: 1 
-        });
-      } catch (error) {
-        console.error('Error fetching stats:', error);
-      }
-    };
-
     checkAuth();
   }, [router]);
 
@@ -54,7 +57,7 @@ export default function AdminMenu() {
     const { error } = await supabase.auth.signOut();
     if (error) {
       alert("Une erreur s'est produite lors de la déconnexion.");
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
     } else {
       router.push('/');
     }
@@ -62,7 +65,7 @@ export default function AdminMenu() {
 
   if (loading) {
     return (
-      <div className="loading-screen">
+      <div className="loading-screen d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
         <div className="spinner-border text-primary" role="status">
           <span className="visually-hidden">Chargement...</span>
         </div>

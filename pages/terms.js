@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Head from 'next/head';
+import Link from "next/link";
 
 const TermsPage = () => {
   React.useEffect(() => {
@@ -153,10 +154,10 @@ const TermsPage = () => {
 
             <h2>2. Définitions</h2>
             <ul>
-              <li>"Plateforme" : SOMBA TEKA et tous ses services associés</li>
-              <li>"Utilisateur" : Toute personne utilisant la plateforme</li>
-              <li>"Vendeur" : Utilisateur souhaitant vendre des produits</li>
-              <li>"Produit" : Article ou service proposé sur la plateforme</li>
+              <li>Plateforme : SOMBA TEKA et tous ses services associés</li>
+              <li>Utilisateur : Toute personne utilisant la plateforme</li>
+              <li>Vendeur : Utilisateur souhaitant vendre des produits</li>
+              <li>Produit : Article ou service proposé sur la plateforme</li>
             </ul>
 
             <h2>3. Utilisation de la Plateforme</h2>
@@ -201,9 +202,9 @@ const TermsPage = () => {
 
             <h2>10. Contact</h2>
 <p>
-  <a href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`} target="_blank" rel="noopener noreferrer">
+  <Link href={`mailto:${process.env.NEXT_PUBLIC_EMAIL}`} target="_blank" rel="noopener noreferrer">
     <i className="fas fa-envelope me-2"></i> Email
-  </a>
+  </Link>
 </p>
 <p>
   <a href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">
