@@ -28,7 +28,7 @@ export default function About() {
             <div className="col-lg-10 mx-auto">
               <h2 className="section-title" style={{color: '#4CAF50'}}>Notre Histoire</h2>
               <p className="lead">Fondée en 2025 par Magic & Tech, Somba-Teka est née de la volonté de digitaliser et faciliter les échanges commerciaux au Congo-Brazzaville.</p>
-              <p>Somba-Teka compte s'imposer comme la plateforme de référence pour connecter les professionnels et particuliers souhaitant acheter ou vendre des produits et services.</p>
+              <p>Somba-Teka compte s&apos;imposer comme la plateforme de référence pour connecter les professionnels et particuliers souhaitant acheter ou vendre des produits et services.</p>
             </div>
           </div>
         </div>

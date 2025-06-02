@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import Header from '@/components/Header2';
+import Link from "next/link";
 import '../styles/login.css';
+
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -122,7 +124,7 @@ export default function Login() {
               setShowResetModal(true);
             }}>
               Mot de passe oublié ?
-            </a>
+            </Link>
           </div>
 
           <button type="submit" className="login-button">Se connecter</button>

@@ -4,7 +4,6 @@ function uploadImageToCloudinary(file, fileName = '') {
       return reject(new Error("Fichier image non valide"));
     }
 
-    // Générer un nom unique si aucun n'est passé
     const timestamp = Date.now();
     const safeFileName = fileName || `product-${timestamp}`;
 

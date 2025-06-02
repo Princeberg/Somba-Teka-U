@@ -81,7 +81,7 @@ export default function RegisterSeller() {
           WhatsappURL: `https://wa.me/${WhatsApp.replace(/\s+/g, '')}`,
           sellerName: sellerName,
           BirthDate,
-          sellerContact,
+          sellerContact: SellerPhone,
           created_at: new Date().toISOString(),
         }]);
 
