@@ -1,11 +1,5 @@
 
-        body {
-         
-          background-color: var(--background-color);
-          line-height: 1.6;
-          transition: var(--transition);
-          -webkit-font-smoothing: antialiased;
-        }
+     
 
         .container {
           width: 100%;

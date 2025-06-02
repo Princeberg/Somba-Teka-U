@@ -1,8 +1,4 @@
-    body {
-      line-height: 1.6;
-      background-color: var(--background-light);
-      color: var(--text-light);
-    }
+
 
     .container {
       max-width: 1200px;
