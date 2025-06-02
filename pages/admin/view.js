@@ -14,23 +14,62 @@ const AdminViews = () => {
   const productsPerPage = 9;
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const { data, error } = await supabase.from('products').select('*').order('created_at', { ascending: false });
-      if (error) {
-        console.error('Erreur lors de la récupération des produits:', error);
-      } else {
-        setProducts(data);
-      }
-    };
-    fetchProducts();
-  }, []);
+  const fetchProducts = async () => {
+    try {
+      const { data: productsData, error: productError } = await supabase
+        .from('products')
+        .select('*')
+        .order('Booster', { ascending: false });
+
+      if (productError) throw productError;
+
+      const productsWithSellerInfo = await Promise.all(
+        productsData.map(async (product) => {
+          let { sellerName, sellerContact, WhatsappURL } = product;
+
+          const needsSellerFetch =
+            !sellerName?.trim() || !sellerContact?.trim() || !WhatsappURL?.trim();
+
+          if (needsSellerFetch && product.id_seller) {
+            const { data: seller, error: sellerError } = await supabase
+              .from('sellers')
+              .select('sellerName, sellerContact, WhatsappURL')
+              .eq('id_user', product.id_seller)
+              .single();
+
+            if (sellerError) {
+              console.warn(`Erreur lors de la récupération du vendeur pour le produit ${product.id}`, sellerError);
+            }
+
+            sellerName = seller?.sellerName || sellerName || '';
+            sellerContact = seller?.sellerContact || sellerContact || '';
+            WhatsappURL = seller?.WhatsappURL || WhatsappURL || '';
+          }
+
+          return {
+            ...product,
+            sellerName,
+            sellerContact,
+            WhatsappURL,
+          };
+        })
+      );
+
+      setProducts(productsWithSellerInfo);
+    } catch (error) {
+      console.error('Erreur lors du chargement des produits:', error);
+    }
+  };
+
+  fetchProducts();
+}, []);
 
   const deleteProduct = async (id) => {
     const { error } = await supabase.from('products').delete().eq('id', id);
     if (error) {
       console.error('Erreur lors de la suppression du produit:', error);
     } else {
-      setProducts(products.filter((product) => product.id !== id));
+      setProducts((prev) => prev.filter((product) => product.id !== id));
     }
   };
 
@@ -55,7 +94,9 @@ const AdminViews = () => {
               <div><strong>Vendeur:</strong> {product.sellerName}</div>
               <div><strong>Contact:</strong> {product.sellerContact}</div>
               <div><strong>Prix:</strong> {product.price} FCFA</div>
-              <div><strong>{product.vues} Vues </strong></div>
+              <div><strong>{product.vues || '0'} Vues </strong></div>
+              <div>Boost: <strong>{product.Booster|| 'Aucun Boost'}  </strong></div>
+              <div>Fin du Boost: <strong>{product.BoostEnd || 'Aucune date'}  </strong></div>
             </div>
 
             <div className="card-images">

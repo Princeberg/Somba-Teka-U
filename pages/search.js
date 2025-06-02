@@ -25,9 +25,9 @@ export default function Search() {
     try {
       const { data: productsData, error } = await supabase
         .from('products')
-        .select('id, productName, price, productPicture1, categorie, ville, vues, created_at')
+        .select('*')
         .eq('categorie', category)
-        .order('vues', { ascending: false });
+        .order('Booster', { ascending: false });
 
       if (error) throw error;
 
@@ -245,7 +245,7 @@ export default function Search() {
         <div className="product-name">{product.productName}</div>
         <div className="product-ville">{product.ville}</div>
         <div className="product-vues">
-          <i className="fas fa-eye"></i> {product.vues || 0} vues
+           <p className="product-description" style= {{color: "black"}}>{product.description?.substring(0, 50)}...</p>
         </div>
         <div className="product-price">
           {product.price ? `${product.price} FCFA` : 'Tarif indéterminé'}

@@ -222,7 +222,7 @@ export default function HomePage() {
       const { data, error } = await supabase
         .from('products')
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('Booster', { ascending: false })
         .limit(50);
 
       if (error) {

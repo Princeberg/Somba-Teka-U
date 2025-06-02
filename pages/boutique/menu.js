@@ -34,7 +34,7 @@ export default function AdminMenu() {
     const fetchStats = async (sellerId) => {
       try {
         const { count: activeProducts } = await supabase
-          .from('produits')
+          .from('products')
           .select('*', { count: 'exact', head: true })
           .eq('id_seller', sellerId); 
 

@@ -71,6 +71,7 @@ export default function Vendeur() {
             <thead>
               <tr>
                 <th>Nom du vendeur</th>
+                <th>Date de Naissance</th>
                 <th>Téléphone</th>
                 <th>Whatsapp</th>
                  <th>Email</th>
@@ -80,10 +81,11 @@ export default function Vendeur() {
             <tbody>
               {sellers.map((seller) => (
                 <tr key={seller.id_user}>
-                  <td>{seller.SellerName}</td>
+                  <td>{seller.sellerName}</td>
+                  <td>{seller.BirthDate}</td>
                    <td>
-  <a href={`tel:${seller.SellerPhone}`} target="_blank" rel="noopener noreferrer">
-    {seller.SellerPhone}
+  <a href={`tel:${seller.sellerContact}`} target="_blank" rel="noopener noreferrer">
+    {seller.sellerContact}
   </a>
 </td>
 

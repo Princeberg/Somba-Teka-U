@@ -62,7 +62,7 @@ export default function AdminMenu() {
       alert("Une erreur s'est produite lors de la déconnexion.");
       console.error("Logout error:", error);
     } else {
-      router.push('/home');
+      router.push('/');
     }
   };
 

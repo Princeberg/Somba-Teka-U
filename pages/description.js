@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 import Image from 'next/image';
 import supabase from '../lib/supabase';
 import '../styles/description.css';
@@ -31,30 +30,64 @@ export default function ProductDescription() {
   };
 
   useEffect(() => {
-    if (!id) return;
-    const fetchProduct = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .eq('id', id)
-          .single();
-        if (error) throw error;
-        if (data) {
-          setProduct(data);
-          await incrementViews(data.id, data.vues || 0);
-        } else {
-          setError('Produit non trouvé');
-        }
-      } catch (err) {
-        console.error('Error fetching product:', err);
-        setError('Erreur de chargement');
-      } finally {
-        setLoading(false);
+  if (!id) return;
+
+  const fetchProduct = async () => {
+    try {
+  
+      const { data: product, error: productError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (productError) throw productError;
+      if (!product) {
+        setError('Produit non trouvé');
+        return;
       }
-    };
-    fetchProduct();
-  }, [id]);
+
+      let sellerInfo = {
+        sellerName: product.sellerName,
+        sellerContact: product.sellerContact,
+        WhatsappURL: product.WhatsappURL
+      };
+
+      if (!sellerInfo.sellerName || !sellerInfo.sellerContact || !sellerInfo.WhatsappURL) {
+        const { data: seller, error: sellerError } = await supabase
+          .from('sellers')
+          .select('sellerName, sellerContact, WhatsappURL')
+          .eq('id_user', product.id_seller)
+          .single(); 
+
+        if (sellerError) throw sellerError;
+
+        sellerInfo = {
+          sellerName: sellerInfo.sellerName || seller?.sellerName || '',
+          sellerContact: sellerInfo.sellerContact || seller?.sellerContact || '',
+          WhatsappURL: sellerInfo.WhatsappURL || seller?.WhatsappURL || ''
+        };
+      }
+
+      // Fusionner dans un seul objet
+      const finalProduct = {
+        ...product,
+        ...sellerInfo
+      };
+
+      setProduct(finalProduct);
+      await incrementViews(product.id, product.vues || 0);
+    } catch (err) {
+      console.error('Erreur lors du chargement du produit:', err);
+      setError('Erreur de chargement');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProduct();
+}, [id]);
+
 
   const incrementViews = async (productId, currentViews) => {
     try {
@@ -62,9 +95,9 @@ export default function ProductDescription() {
         .from('products')
         .update({ vues: currentViews + 1 })
         .eq('id', productId);
-      if (error) console.error("Error incrementing views:", error);
+      if (error) console.error("Erreur lors de l'incrémentation des vues:", error);
     } catch (e) {
-      console.error("Unexpected error:", e);
+      console.error("Erreur inattendue:", e);
     }
   };
 
@@ -78,12 +111,6 @@ export default function ProductDescription() {
     setShowModal(false);
     document.body.style.overflow = 'auto';
   };
-
-  useEffect(() => {
-    const handleContextMenu = (e) => e.preventDefault();
-    document.addEventListener('contextmenu', handleContextMenu);
-    return () => document.removeEventListener('contextmenu', handleContextMenu);
-  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -110,7 +137,8 @@ export default function ProductDescription() {
         <link href="https://fonts.googleapis.com/css2?family=Cardo&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </Head>
-      <Header/>
+
+      <Header />
 
       <main className="container main-content">
         {loading ? (
@@ -168,21 +196,22 @@ export default function ProductDescription() {
                     </div>
                   </div>
 
-                  <div className="info-item">
-                    <i className="fas fa-user-tie"></i>
-                    <div className="info-text">
-                      <span className="info-label">Vendeur</span>
-                      <span className="info-value">{product.sellerName || "Non spécifié"}</span>
-                    </div>
-                  </div>
+                 <div className="info-item">
+  <i className="fas fa-user-tie"></i>
+  <div className="info-text">
+    <span className="info-label">Vendeur</span>
+    <span className="info-value">{product.sellerName || "Non spécifié"}</span>
+  </div>
+</div>
 
-                  <div className="info-item">
-                    <i className="fas fa-phone"></i>
-                    <div className="info-text">
-                      <span className="info-label">Contact</span>
-                      <span className="info-value">{product.sellerContact || "Non spécifié"}</span>
-                    </div>
-                  </div>
+<div className="info-item">
+  <i className="fas fa-phone"></i>
+  <div className="info-text">
+    <span className="info-label">Contact</span>
+    <span className="info-value">{product.sellerContact || "Non spécifié"}</span>
+  </div>
+</div>
+
 
                   <div className="info-item">
                     <i className="fas fa-map-marker-alt"></i>

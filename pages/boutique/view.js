@@ -42,9 +42,9 @@ const AdminViews = () => {
 
   const fetchProducts = async (sellerId) => {
     const { data, error } = await supabase
-      .from('produits')
+      .from('products')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('vues', { ascending: false })
       .eq('id_seller', sellerId);
 
     if (error) {

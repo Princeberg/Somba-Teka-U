@@ -46,7 +46,7 @@ export default async function handler(req, res) {
     };
 
     const { data, error } = await supabase
-      .from('demande')
+      .from('requests')
       .insert([productData])
       .select();
 
