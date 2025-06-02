@@ -13,7 +13,6 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [language, setLanguage] = useState("fr");
   const router = useRouter();
-  const { pathname, asPath } = router;
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
