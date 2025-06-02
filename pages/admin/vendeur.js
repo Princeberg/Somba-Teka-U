@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import supabase from '@/lib/supabase';
-import '@/styles/vendeur.css';
+import '@/styles/vendeur.module.css';
 import Header from '@/components/Header3';
 import 'aos/dist/aos.css';
-import '@/styles/ajout.css';
+import '@/styles/ajout.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Vendeur() {

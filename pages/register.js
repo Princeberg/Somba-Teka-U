@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Link from "next/link";
-import '@/styles/register.css';
+import '@/styles/register.module.css';
 
 export default function RegisterSeller() {
   const [formData, setFormData] = useState({

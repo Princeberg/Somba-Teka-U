@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
-import '../styles/search.css';
+import '../styles/search.module.css';
 import Header from '@/components/Header2';
 
 export default function Search() {

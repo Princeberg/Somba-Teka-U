@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import Header from '@/components/Header2';
 import Link from "next/link";
-import '../styles/login.css';
+import '../styles/login.module.css';
 
 
 export default function Login() {

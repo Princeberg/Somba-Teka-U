@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import supabase from '../lib/supabase';
-import '../styles/description.css';
+import '../styles/description.module.css';
 import Header from '@/components/Header2';
 
 export default function ProductDescription() {

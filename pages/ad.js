@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import Head from 'next/head';
 import Header from "@/components/Header2";
-import '@/styles/ad.css';
+import '@/styles/ad.module.css';
 import Script from 'next/script';
 
 const AdPage = () => {

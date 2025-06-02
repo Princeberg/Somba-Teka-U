@@ -3,7 +3,7 @@ import Header from "@/components/Header2";
 import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import '@/styles/about.css';
+import '@/styles/about.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function About() {

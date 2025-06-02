@@ -6,7 +6,7 @@ import supabase from '@/lib/supabase';
 import Header from '@/components/Header4';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'aos/dist/aos.css';
-import '@/styles/view.css';
+import '@/styles/view.module.css';
 import useAuth from '@/lib/Auth';
 
 const AdminViews = () => {
