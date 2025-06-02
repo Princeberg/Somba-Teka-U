@@ -81,7 +81,7 @@ export default function AdminHeader() {
       <header className="header" role="banner">
         <div className="container">
           <div className="header-left">
-            <Link href="#" legacyBehavior>
+            <Link href="#">
               <a className="logo" onClick={closeMenu} aria-label="SOMBA TEKA Home">
                 <span className="logo-main">SOMBA</span>
                 <span className="logo-accent">TEKA</span>
@@ -97,7 +97,7 @@ export default function AdminHeader() {
             >
               <ul>
                 <li>
-                  <Link href="/admin/menu" legacyBehavior>
+                  <Link href="/admin/menu">
                     <a
                       onClick={closeMenu}
                       className="nav-link"
@@ -109,7 +109,7 @@ export default function AdminHeader() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/admin/ajout" legacyBehavior>
+                  <Link href="/admin/ajout">
                     <a
                       onClick={closeMenu}
                       className="nav-link"
@@ -121,7 +121,7 @@ export default function AdminHeader() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/admin/view" legacyBehavior>
+                  <Link href="/admin/view">
                     <a
                       onClick={closeMenu}
                       className="nav-link"
@@ -133,7 +133,7 @@ export default function AdminHeader() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/admin/vendeur" legacyBehavior>
+                  <Link href="/admin/vendeur">
                     <a
                       onClick={closeMenu}
                       className="nav-link"
@@ -145,7 +145,7 @@ export default function AdminHeader() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/logout" legacyBehavior>
+                  <Link href="/logout">
                     <a
                       onClick={closeMenu}
                       className="nav-link"

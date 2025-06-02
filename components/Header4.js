@@ -75,7 +75,7 @@ export default function AdminHeader() {
       <header className="header" role="banner">
         <div className="container">
           <div className="header-left">
-            <Link href="#" legacyBehavior>
+            <Link href="#">
               <a className="logo" onClick={closeMenu} aria-label="SOMBA TEKA Home">
                 <span className="logo-main">SOMBA</span>
                 <span className="logo-accent">TEKA</span>
@@ -91,7 +91,7 @@ export default function AdminHeader() {
             >
               <ul>
                 <li>
-                  <Link href="/boutique/menu" legacyBehavior>
+                  <Link href="/boutique/menu">
                     <a
                       onClick={closeMenu}
                       className="nav-link"
@@ -103,7 +103,7 @@ export default function AdminHeader() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/boutique/demande" legacyBehavior>
+                  <Link href="/boutique/demande">
                     <a
                       onClick={closeMenu}
                       className="nav-link"
@@ -115,7 +115,7 @@ export default function AdminHeader() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/boutique/view" legacyBehavior>
+                  <Link href="/boutique/view">
                     <a
                       onClick={closeMenu}
                       className="nav-link"
@@ -127,7 +127,7 @@ export default function AdminHeader() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/logout" legacyBehavior>
+                  <Link href="/logout">
                     <a
                       onClick={closeMenu}
                       className="nav-link"

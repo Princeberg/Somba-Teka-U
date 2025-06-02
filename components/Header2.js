@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,12 +11,37 @@ import {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [language, setLanguage] = useState("fr");
   const router = useRouter();
   const { pathname, asPath } = router;
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
 
+
+  useEffect(() => {
+    const savedLang = localStorage.getItem("language") || router.locale || "fr";
+    setLanguage(savedLang);
+  }, []);
+
+  const translations = {
+    en: {
+      home: "Home",
+      ad: "Advertising",
+      about: "About",
+      shopSpace: "Seller Space",
+      language: "Language",
+    },
+    fr: {
+      home: "Accueil",
+      ad: "Publicité",
+      about: "À propos",
+      shopSpace: "Espace vendeur",
+      language: "Langue",
+    },
+  };
+
+  const t = translations[language] || translations.fr;
 
   return (
     <>
@@ -63,6 +88,27 @@ export default function Header() {
           </div>
 
           <div className="header-right">
+            {/* <div className="header-controls">
+              
+
+              <div className="language-switcher">
+                <button
+                  className={`language-btn ${language === "fr" ? "active" : ""}`}
+                  onClick={() => changeLanguage("fr")}
+                >
+                  FR
+                </button>
+                <span className="language-separator">|</span>
+                <button
+                  className={`language-btn ${language === "en" ? "active" : ""}`}
+                  onClick={() => changeLanguage("en")}
+                >
+                  EN
+                </button>
+                
+              </div>
+            </div> */}
+
             <Link href="/login" legacyBehavior>
               <a className="auth-button" onClick={closeMenu}>
                 <FontAwesomeIcon icon={faUser} className="auth-icon" />
@@ -85,6 +131,44 @@ export default function Header() {
         </div>
       </header>
 
+      {/* Global Dark Mode Support */}
+      <style jsx global>{`
+        :root {
+          --primary-bg:   #f8f9fa;
+          --secondary-bg: #f8f9fa;
+          --text-color: #333333;
+          --text-muted: #6c757d;
+          --accent-color: #4CAF50;
+          --border-color: rgba(0, 0, 0, 0.1);
+          --card-bg: #ffffff;
+          --container-bg:  #ffffff; 
+          --hover-bg: rgba(0, 0, 0, 0.05);
+          --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark {
+          --primary-bg: rgba(15, 15, 25, 0.95);
+          --secondary-bg:rgba(15, 15, 25, 0.95);
+          --text-color: white;
+          --text-muted: white;
+          --accent-color: #5cb85c;
+          --border-color: rgba(255, 255, 255, 0.1);
+          --card-bg:rgba(0, 0, 0, 0.1);
+          --container-bg: rgba(0, 0, 0, 0.1);
+          --hover-bg: white;
+          --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+          --coming-soon-container: 0 2px 10px rgba(0, 0, 0, 0.3);
+
+        }
+
+        html, body {
+          background-color: var(--secondary-bg);
+          color: var(--text-color);
+          transition: background-color 0.3s ease, color 0.3s ease;
+          font-family: 'Inter', sans-serif;
+        }
+          
+      `}</style>
 
       {/* Component-specific styles */}
       <style jsx>{`
