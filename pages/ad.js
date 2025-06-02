@@ -122,7 +122,7 @@ const AdPage = () => {
             <h2 className="cta-title" style={{color: '#4CAF50'}}>Intéressé par nos espaces publicitaires ?</h2>
             <p className="cta-description">
               Profitez de notre audience engagée pour promouvoir votre marque, produit ou service.
-              Contactez-nous dès aujourd'hui pour discuter des options disponibles.
+              Contactez-nous dès aujourd&apos;hui pour discuter des options disponibles.
             </p>
             <a
               href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}

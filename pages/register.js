@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '../lib/supabase';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Link from "next/link";
 import '@/styles/register.css';
 
 export default function RegisterSeller() {
@@ -219,7 +220,7 @@ export default function RegisterSeller() {
         <button type="submit" className="btn btn-primary w-100">Créer maintenant</button>
 
         <div className="text-center mt-3">
-          Déjà un compte ? <a href="/login">Se connecter</a>
+          Déjà un compte ? <Link href="/login">Se connecter</Link>
         </div>
       </form>
     </div>

@@ -23,7 +23,7 @@ export default function LogoutPage() {
         Vous êtes maintenant déconnecté.
       </h1>
       <p className="text-gray-600 dark:text-gray-300">
-        Redirection vers l'accueil en cours...
+        Redirection vers l&apos;accueil en cours...
       </p>
     </div>
   );

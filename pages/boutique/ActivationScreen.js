@@ -262,7 +262,7 @@ export default function ActivationScreen() {
             <h3 style={styles.modalTitle}>Instructions de Paiement</h3>
             <p>
               Veuillez effectuer un dépôt de{" "}
-              <strong>{paymentAmount} FCFA</strong> à l'un des numéros suivants :
+              <strong>{paymentAmount} FCFA</strong> à l&apos;un des numéros suivants :
             </p>
             <div style={styles.paymentInstruction}>
               <p>
@@ -295,7 +295,7 @@ export default function ActivationScreen() {
             </p>
             <p>
               Vous disposez de <strong>15 minutes</strong> pour effectuer le paiement.
-              Après le paiement, cliquez sur "Paiement effectué".
+              Après le paiement, cliquez sur Paiement effectué.
             </p>
 
             <div style={styles.modalButtons}>

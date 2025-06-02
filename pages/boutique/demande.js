@@ -70,6 +70,7 @@ export default function AddProductPage() {
         [index]: result.url,
       }));
     } catch (uploadError) {
+      console.error("Erreur d'upload Cloudinary :", uploadError);
       setError("Erreur lors de l'upload de l'image");
       e.target.value = '';
     }
@@ -165,7 +166,7 @@ export default function AddProductPage() {
       
       <div className="container" style={{marginTop:'80px'}}>
         <div className="form-container">
-            <h3>Ajout d'un Nouveau Produit</h3>
+            <h3>Ajout d&apos;un Nouveau Produit</h3>
             <p className="form-subtitle">Remplissez ce formulaire pour ajouter votre produit à notre plateforme</p>
           </div>
           
@@ -353,7 +354,7 @@ export default function AddProductPage() {
                     required 
                   />
                   <label className="form-check-label" htmlFor="termsCheck">
-                    J'accepte les <a href="./terms" className="terms-link">conditions d'utilisation</a>
+                    J&apos;accepte les <a href="./terms" className="terms-link">conditions d&apos;utilisation</a>
                   </label>
                 </div>
               </div>

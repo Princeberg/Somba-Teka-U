@@ -82,7 +82,7 @@ const AdminViews = () => {
     <>
     <Header/>
     <div className="container" style={{marginTop:'80px'}}>
-      <h1 className="page-title">Vue d'ensemble des produits</h1>
+      <h1 className="page-title">Vue d&apos;ensemble des produits</h1>
       <div className="grid">
         {currentProducts.map((product) => (
           <div key={product.id} className="card">

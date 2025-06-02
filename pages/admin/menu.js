@@ -172,7 +172,7 @@ export default function AdminMenu() {
                   <div className="card-icon">
                     <i className="fas fa-plus-circle"></i>
                   </div>
-                  <h5 className="card-title">Demandes d'ajout</h5>
+                  <h5 className="card-title">Demandes d&apos;ajout</h5>
                   <p className="card-text">Gérez les demandes de nouveaux produits soumises par les vendeurs</p>
                   <div className="card-footer">
                     <button className="btn btn-admin btn-admin-primary">

@@ -75,8 +75,6 @@ export default function Ajout() {
 
     if (fetchError) throw fetchError;
 
-    const { id, ...rest } = product;
-
     // Nettoyer l'objet à insérer
     const productToInsert = { ...rest };
 

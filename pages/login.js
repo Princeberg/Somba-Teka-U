@@ -23,7 +23,7 @@ export default function Login() {
     }
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -130,7 +130,7 @@ export default function Login() {
           <button type="submit" className="login-button">Se connecter</button>
 
           <div className="signup-link">
-            Pas encore de compte ? <a href="/register">S'inscrire</a> 
+            Pas encore de compte ? <Link href="/register">S&apos;inscrire</Link> 
           </div>
         </form>
 

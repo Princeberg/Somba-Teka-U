@@ -121,7 +121,7 @@ const AdminViews = () => {
     <>
       <Header />
       <div className="container" style={{ marginTop: '80px' }}>
-        <h1 className="page-title">Vue d'ensemble des produits</h1>
+        <h1 className="page-title">Vue d&apos;ensemble des produits</h1>
 
         <div className="grid">
           {currentProducts.map((product) => (
@@ -135,7 +135,7 @@ const AdminViews = () => {
                 <div><strong>Nombre de vues:</strong> {product.vues}</div>
                 <div><strong>Fin du Boost :</strong> {product.BoostEnd || 'Pas de Boost actif'}   </div>
                 {product.boost_end_date && (
-                  <div><strong>Boost actif jusqu'au:</strong> {product.BoostEnd}</div>
+                  <div><strong>Boost actif jusqu&apos;au:</strong> {product.BoostEnd}</div>
                 )}
               </div>
 

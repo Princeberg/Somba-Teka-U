@@ -12,7 +12,6 @@ export default function AdminMenu() {
   const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
-    pendingRequests: 0,
     activeProducts: 0,
     activeSellers: 0
   });
