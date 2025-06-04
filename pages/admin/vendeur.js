@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import supabase from '@/lib/supabase';
 import Header from '@/components/Header3';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import styles from '../../styles/Vendeur.module.css';
+import styles from '../../styles/V.module.css';
 import { 
   FiUser, 
   FiTrash2, 
