@@ -70,7 +70,11 @@ export default function Search() {
             <p className="text-muted">Cette catégorie est vide pour le moment.</p>
           </div>
         )}
-
+ <div className="back-button">
+  <button onClick={() => router.back()}>
+    <i className="fas fa-arrow-left"></i> Retour
+  </button>
+</div>
         <div className="row g-4">
           {products.map((product) => (
             <div
@@ -118,6 +122,23 @@ export default function Search() {
           overflow: hidden;
           text-overflow: ellipsis;
         }
+           .back-button button {
+          background: none;
+          border: none;
+          color: var(--text-color);
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+          font-size: 1rem;
+          padding: 0.5rem 0;
+        }
+
+        .back-button button:hover {
+          color: var(--accent-color);
+        }
+
       `}</style>
     </>
   );

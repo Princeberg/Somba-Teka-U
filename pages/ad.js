@@ -253,7 +253,8 @@ const AdPage = () => {
             font-size: 2rem;
           }
           .swiper-slide img {
-            max-height: 250px;
+            max-height: auto; 
+            max-width:500px; 
           }
           .cta-title {
             font-size: 1.5rem;

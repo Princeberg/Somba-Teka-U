@@ -384,4 +384,7 @@ forgot-password {
         font-size: 20px;
       }
     }
-   
+   .nav-link:focus-visible {
+  outline: 2px dashed var(--accent-color);
+  outline-offset: 4px;
+}

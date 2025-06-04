@@ -34,7 +34,7 @@ export default function ActivationScreen() {
     setPaymentAmount(tarifVal);
   }, []);
 
- const styles = {
+  const styles = {
     container: {
       minHeight: "100vh",
       background: "linear-gradient(to right, #f0f4f8, #ffffff)",
@@ -70,7 +70,6 @@ export default function ActivationScreen() {
       borderRadius: "0.5rem",
       border: "1px solid #d1d5db",
       outline: "none",
-      transition: "border-color 0.2s",
       fontSize: "1rem",
     },
     inputError: {
@@ -87,17 +86,25 @@ export default function ActivationScreen() {
       cursor: "pointer",
       marginTop: "1.5rem",
       fontSize: "1rem",
-      transition: "background-color 0.2s",
-    },
-    buttonHover: {
-      backgroundColor: "#1e40af",
     },
     errorText: {
       color: "#dc2626",
       fontSize: "0.875rem",
       marginTop: "0.25rem",
     },
-    // Modal styles
+    backButton: {
+      backgroundColor: "#e5e7eb",
+      color: "#374151",
+      padding: "0.4rem 0.8rem",
+      borderRadius: "0.5rem",
+      border: "none",
+      cursor: "pointer",
+      fontSize: "0.9rem",
+      display: "flex",
+      alignItems: "center",
+      gap: "0.5rem",
+      marginBottom: "1rem",
+    },
     modalOverlay: {
       position: "fixed",
       inset: 0,
@@ -159,9 +166,6 @@ export default function ActivationScreen() {
       border: "none",
       cursor: "pointer",
     },
-    confirmButtonHover: {
-      backgroundColor: "#15803d",
-    },
   };
 
   function validateForm() {
@@ -194,7 +198,7 @@ export default function ActivationScreen() {
   async function processPayment() {
     try {
       const { error } = await supabase
-        .from("produits")
+        .from("products")
         .update({
           PayementKey: paymentKey,
           NumeroPayement: phoneNumber,
@@ -205,16 +209,14 @@ export default function ActivationScreen() {
         .eq("id", productId);
 
       if (error) {
-        console.error("Supabase update error:", error);
-        alert("Erreur d'activation");
+        alert("Une erreur est survenue lors de l'activation. Veuillez réessayer plus tard.");
         return;
       }
 
       alert("Nous allons vérifier votre paiement. Merci de patienter !");
-      router.push("/boutique/view"); 
-    } catch (err) {
-      console.error("Erreur lors du paiement:", err);
-      alert("Une erreur s'est produite pendant le traitement.");
+      router.push("/boutique/view");
+    } catch {
+      alert("Une erreur technique s'est produite. Veuillez vérifier votre connexion et réessayer.");
     }
   }
 
@@ -230,6 +232,9 @@ export default function ActivationScreen() {
   return (
     <div style={styles.container}>
       <div style={styles.card}>
+        <button style={styles.backButton} onClick={() => router.back()}>
+          <i className="fas fa-arrow-left"></i> Retour
+        </button>
         <h2 style={styles.title}>Booster un produit</h2>
         <form onSubmit={handleSubmit}>
           <label style={styles.label} htmlFor="phoneNumber">
@@ -285,7 +290,7 @@ export default function ActivationScreen() {
               </p>
             </div>
             <p>
-              Clé de paiement unique: <strong>{paymentKey}</strong>{" "}
+              Clé de paiement unique : <strong>{paymentKey}</strong>{" "}
               <button
                 style={styles.copyButton}
                 onClick={(e) => handleCopy(paymentKey, e)}
@@ -295,7 +300,7 @@ export default function ActivationScreen() {
             </p>
             <p>
               Vous disposez de <strong>15 minutes</strong> pour effectuer le paiement.
-              Après le paiement, cliquez sur Paiement effectué.
+              Après le paiement, cliquez sur "Paiement effectué".
             </p>
 
             <div style={styles.modalButtons}>

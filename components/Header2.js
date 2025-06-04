@@ -11,17 +11,10 @@ import {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-  const [language, setLanguage] = useState("fr");
   const router = useRouter();
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const closeMenu = () => setIsOpen(false);
-
-
-  useEffect(() => {
-    const savedLang = localStorage.getItem("language") || router.locale || "fr";
-    setLanguage(savedLang);
-  }, []);
 
   const translations = {
     en: {
@@ -29,18 +22,16 @@ export default function Header() {
       ad: "Advertising",
       about: "About",
       shopSpace: "Seller Space",
-      language: "Language",
     },
     fr: {
       home: "Accueil",
       ad: "Publicité",
       about: "À propos",
       shopSpace: "Espace vendeur",
-      language: "Langue",
     },
   };
 
-  const t = translations[language] || translations.fr;
+  const t = translations[router.locale || "fr"] || translations.fr;
 
   return (
     <>
@@ -87,27 +78,6 @@ export default function Header() {
           </div>
 
           <div className="header-right">
-            {/* <div className="header-controls">
-              
-
-              <div className="language-switcher">
-                <button
-                  className={`language-btn ${language === "fr" ? "active" : ""}`}
-                  onClick={() => changeLanguage("fr")}
-                >
-                  FR
-                </button>
-                <span className="language-separator">|</span>
-                <button
-                  className={`language-btn ${language === "en" ? "active" : ""}`}
-                  onClick={() => changeLanguage("en")}
-                >
-                  EN
-                </button>
-                
-              </div>
-            </div> */}
-
             <Link href="/login" legacyBehavior>
               <a className="auth-button" onClick={closeMenu}>
                 <FontAwesomeIcon icon={faUser} className="auth-icon" />
@@ -130,43 +100,26 @@ export default function Header() {
         </div>
       </header>
 
-      {/* Global Dark Mode Support */}
+      {/* Global Styles */}
       <style jsx global>{`
         :root {
-          --primary-bg:   #f8f9fa;
+          --primary-bg: #f8f9fa;
           --secondary-bg: #f8f9fa;
           --text-color: #333333;
           --text-muted: #6c757d;
           --accent-color: #4CAF50;
           --border-color: rgba(0, 0, 0, 0.1);
           --card-bg: #ffffff;
-          --container-bg:  #ffffff; 
+          --container-bg: #ffffff; 
           --hover-bg: rgba(0, 0, 0, 0.05);
           --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .dark {
-          --primary-bg: rgba(15, 15, 25, 0.95);
-          --secondary-bg:rgba(15, 15, 25, 0.95);
-          --text-color: white;
-          --text-muted: white;
-          --accent-color: #5cb85c;
-          --border-color: rgba(255, 255, 255, 0.1);
-          --card-bg:rgba(0, 0, 0, 0.1);
-          --container-bg: rgba(0, 0, 0, 0.1);
-          --hover-bg: white;
-          --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-          --coming-soon-container: 0 2px 10px rgba(0, 0, 0, 0.3);
-
         }
 
         html, body {
           background-color: var(--secondary-bg);
           color: var(--text-color);
-          transition: background-color 0.3s ease, color 0.3s ease;
           font-family: 'Inter', sans-serif;
         }
-          
       `}</style>
 
       {/* Component-specific styles */}
@@ -179,7 +132,6 @@ export default function Header() {
           top: 0;
           z-index: 100;
           box-shadow: var(--shadow);
-          transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         
         .container {
@@ -208,12 +160,6 @@ export default function Header() {
           gap: 1.5rem;
         }
         
-        .header-controls {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-        }
-        
         .logo {
           font-family: 'Poppins', sans-serif;
           font-weight: 700;
@@ -231,7 +177,7 @@ export default function Header() {
         }
         
         .logo-accent {
-          color: #5cb85c;
+          color: var(--text-color);
         }
         
         .nav ul {
@@ -254,13 +200,12 @@ export default function Header() {
           gap: 0.5rem;
           padding: 0.5rem 0.75rem;
           border-radius: 6px;
-          position: relative;
         }
         
         .nav-link:hover,
         .nav-link:focus {
           color: white;
-          background:  #5cb85c;
+          background: #5cb85c;
           transform: translateY(-1px);
         }
         
@@ -295,64 +240,6 @@ export default function Header() {
         
         .auth-icon {
           font-size: 0.9rem;
-        }
-        
-        /* Dark/Light mode toggle */
-        .mode-toggle {
-          background: transparent;
-          border: none;
-          color: var(--text-color);
-          cursor: pointer;
-          font-size: 1.1rem;
-          padding: 0.5rem;
-          border-radius: 50%;
-          width: 36px;
-          height: 36px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.3s ease;
-        }
-        
-        .mode-toggle:hover {
-          background: var(--hover-bg);
-          color: #5cb85c;
-        }
-        
-        /* Language switcher */
-        .language-switcher {
-          display: flex;
-          align-items: center;
-          gap: 0.25rem;
-          background: var(--hover-bg);
-          border-radius: 20px;
-          padding: 0.25rem;
-        }
-        
-        .language-btn {
-          background: transparent;
-          border: none;
-          color: var(--text-muted);
-          cursor: pointer;
-          font-size: 0.8rem;
-          padding: 0.25rem 0.5rem;
-          border-radius: 15px;
-          transition: all 0.3s ease;
-          font-weight: 500;
-        }
-        
-        .language-btn.active {
-          color: var(--text-color);
-          background: rgba(76, 175, 80, 0.3);
-        }
-        
-        .language-btn:hover {
-          color: #5cb85c;
-        }
-        
-        .language-separator {
-          color: var(--text-muted);
-          font-size: 0.8rem;
         }
         
         /* Hamburger styles */
@@ -408,34 +295,24 @@ export default function Header() {
         
         @media (max-width: 768px) {
           .header-center {
-            display: none;
-          }
-          
-          .header-right {
-            gap: 1rem;
-          }
-          
-          .header-controls {
-            display: none;
-          }
-          
-          .auth-button span {
-            display: none;
+            position: static;
+            display: block;
           }
           
           .nav {
             position: fixed;
             top: 70px;
+            left: 0;
             right: 0;
             background: var(--primary-bg);
             height: calc(100vh - 70px);
-            width: 280px;
+            width: 100%;
             flex-direction: column;
             padding: 2rem 0;
             transform: translateX(100%);
             transition: transform 0.3s ease;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.3);
-            border-left: 1px solid var(--border-color);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            border-top: 1px solid var(--border-color);
           }
           
           .nav.nav--open {
@@ -451,7 +328,7 @@ export default function Header() {
           .nav-link {
             padding: 0.75rem 1.5rem;
             width: 100%;
-            border-radius: 0;
+            justify-content: center;
           }
           
           .hamburger {
@@ -466,6 +343,10 @@ export default function Header() {
           
           .container {
             padding: 0.75rem 1rem;
+          }
+          
+          .auth-button span {
+            display: none;
           }
         }
       `}</style>

@@ -157,7 +157,7 @@ export default function FeaturedAds() {
         
         @media (max-width: 750px) {
           .modal-content {
-            max-width: 20% !important;
+            max-width: 80% !important;
           }
         }
       `}</style>

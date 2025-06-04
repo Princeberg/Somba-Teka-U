@@ -16,7 +16,8 @@ export default function RegisterSeller() {
 
   const [errors, setErrors] = useState({});
   const [modalMessage, setModalMessage] = useState('');
-  const [modalType, setModalType] = useState(null); // 'success' ou 'error' ou null (fermé)
+  const [modalType, setModalType] = useState(null); // 'success' or 'error' or null (closed)
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -29,6 +30,7 @@ export default function RegisterSeller() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
+    setIsSubmitting(true);
 
     const {
       sellerName,
@@ -40,40 +42,51 @@ export default function RegisterSeller() {
       confirmPassword,
     } = formData;
 
+    // Basic validation
     if (password !== confirmPassword) {
       setErrors({ confirmPassword: "Les mots de passe ne correspondent pas." });
+      setIsSubmitting(false);
       return;
     }
 
     try {
+      // Check if seller already exists
       const { data: existingSellers, error: checkError } = await supabase
         .from('sellers')
         .select('email')
         .eq('email', email);
 
-      if (checkError) throw checkError;
+      if (checkError) {
+        throw new Error("Erreur lors de la vérification de l'existence du vendeur");
+      }
 
       if (existingSellers.length > 0) {
         setModalMessage("Un compte avec cet e-mail existe déjà.");
         setModalType('error');
+        setIsSubmitting(false);
         return;
       }
 
+      // Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
       });
 
-      if (authError) throw authError;
+      if (authError) {
+        throw new Error(authError.message || "Erreur lors de la création du compte");
+      }
 
       const userId = authData?.user?.id;
 
       if (!userId) {
         setModalMessage("Veuillez confirmer votre adresse email pour finaliser l'inscription.");
         setModalType('success');
+        setIsSubmitting(false);
         return;
       }
 
+      // Create seller profile
       const { error: profileError } = await supabase
         .from('sellers')
         .insert([{
@@ -86,7 +99,11 @@ export default function RegisterSeller() {
           created_at: new Date().toISOString(),
         }]);
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        // Attempt to delete the auth user if profile creation fails
+        await supabase.auth.admin.deleteUser(userId);
+        throw new Error(profileError.message || "Erreur lors de la création du profil vendeur");
+      }
 
       setModalMessage("Inscription réussie ! Veuillez vérifier votre email.");
       setModalType('success');
@@ -94,15 +111,15 @@ export default function RegisterSeller() {
       setTimeout(() => router.push('/login'), 3000);
 
     } catch (error) {
-      console.error('Erreur lors de l’inscription :', error);
-      setModalMessage(`Erreur : ${error.message || "Une erreur est survenue."}`);
+      setModalMessage(error.message || "Une erreur inattendue est survenue lors de l'inscription");
       setModalType('error');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="register-container container py-5">
-
       <div className="register-header text-center mb-4">
         <h1 className="register-title">Créer votre compte de vendeur</h1>
         <p className="register-subtitle">Remplissez les informations pour commencer</p>
@@ -110,7 +127,6 @@ export default function RegisterSeller() {
 
       <form onSubmit={handleSubmit}>
         <div className="row">
-
           <div className="col-md-6 mb-3">
             <label htmlFor="sellerName" className="form-label">Nom du vendeur</label>
             <input type="text" id="sellerName" className="form-control" value={formData.sellerName} onChange={handleChange} required />
@@ -152,17 +168,18 @@ export default function RegisterSeller() {
             <input type="password" id="confirmPassword" className="form-control" value={formData.confirmPassword} onChange={handleChange} required minLength={6} />
             {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
           </div>
-
         </div>
 
-        <button type="submit" className="btn btn-primary w-100">Créer maintenant</button>
+        <button type="submit" className="btn btn-primary w-100" disabled={isSubmitting}>
+          {isSubmitting ? 'Traitement...' : 'Créer maintenant'}
+        </button>
 
         <div className="text-center mt-3">
           Déjà un compte ? <Link href="/login">Se connecter</Link>
         </div>
       </form>
 
-      {/* Modale personnalisée */}
+      {/* Modal */}
       {modalType && (
         <div className="modal-backdrop" onClick={handleCloseModal} style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -178,11 +195,22 @@ export default function RegisterSeller() {
               {modalType === 'success' ? 'Succès' : 'Erreur'}
             </h5>
             <p>{modalMessage}</p>
-            <button className="btn btn-secondary mt-3" onClick={handleCloseModal}>Fermer</button>
+            <div className="d-flex justify-content-end">
+              <button 
+                className="btn btn-secondary mt-3" 
+                onClick={handleCloseModal}
+                style={{
+                  backgroundColor: modalType === 'success' ? 'green' : 'red',
+                  color: 'white',
+                  border: 'none'
+                }}
+              >
+                Fermer
+              </button>
+            </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }
