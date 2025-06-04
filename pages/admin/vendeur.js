@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import supabase from '@/lib/supabase';
 import Header from '@/components/Header3';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import styles from '@/styles/Vendeur.module.css';
 import { 
   FiUser, 
   FiTrash2, 
@@ -11,7 +12,6 @@ import {
   FiPhone, 
   FiMessageSquare, 
   FiCalendar,
-  FiLoader,
   FiAlertCircle
 } from 'react-icons/fi';
 import { 
@@ -24,7 +24,7 @@ import {
   Tooltip,
   OverlayTrigger
 } from 'react-bootstrap';
-import styles from '@/styles/Vendeur.module.css';
+
 
 export default function Vendeur() {
   const [sellers, setSellers] = useState([]);
