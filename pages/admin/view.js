@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'aos/dist/aos.css';
 import { Modal, Button, Spinner, Badge, Alert } from 'react-bootstrap';
 import { FiTrash2, FiChevronLeft, FiChevronRight, FiEye, FiDollarSign, FiUser, FiPhone, FiClock } from 'react-icons/fi';
-import styles from '@/styles/AdminViews.module.css';
+import styles from './styles/AdminViews.module.css';
 
 const AdminViews = () => {
   const [products, setProducts] = useState([]);
