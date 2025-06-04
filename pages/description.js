@@ -3,7 +3,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import supabase from '../lib/supabase';
-import '../styles/description.module.css';
 import Header from '@/components/Header2';
 
 export default function ProductDescription() {
@@ -14,6 +13,9 @@ export default function ProductDescription() {
   const [error, setError] = useState(null);
   const [modalImage, setModalImage] = useState('');
   const [showModal, setShowModal] = useState(false);
+
+
+  const [theme, setTheme] = useState('light');
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'light';
@@ -124,10 +126,6 @@ export default function ProductDescription() {
         <title>{product?.productName || 'Détails du Produit'}</title>
         <meta name="author" content="SOMBA TEKA" />
         <meta name="description" content={product?.description || "Détails du produit"} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Cardo&family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </Head>
 
       <Header />
@@ -170,6 +168,11 @@ export default function ProductDescription() {
             <div className="product-info">
               <div className="product-header">
                 <h1 className="product-title">{product.productName}</h1>
+                    <div className="back-button">
+  <button onClick={() => router.back()}>
+    <i className="fas fa-arrow-left"></i> Retour
+  </button>
+</div>
                 <div className="product-price">
                   {product.price === 0 || product.price == null
                     ? 'Tarif indéterminé'
@@ -263,8 +266,8 @@ export default function ProductDescription() {
           position: absolute;
           top: 0;
           left: 0;
-          width: 100%;
-          height: 100%;
+          width: 80%;
+          height: auto;
         }
 
        .image-item:hover .product-image {
@@ -290,7 +293,7 @@ export default function ProductDescription() {
         }
 
         .product-info {
-          background: rgba(255, 255, 255, 0.1);
+          background: white;
           backdrop-filter: blur(10px);
           border-radius: 12px;
           padding: 2rem;
@@ -445,19 +448,25 @@ export default function ProductDescription() {
         }
 
         .modal-content {
-          max-width: 90%;
-          max-height: 90%;
-          object-fit: contain;
+          max-width: 40%;
+          max-height: auto;
+          border-radius: 12px;
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
         .close {
           position: absolute;
           top: 20px;
           right: 30px;
-          color: white;
-          font-size: 35px;
+          color: #ffffff;
+          font-size: 2rem;
           font-weight: bold;
           cursor: pointer;
+          z-index: 1001;
+        }
+
+        .close:hover {
+          color: #ccc;
         }
 
         @media (max-width: 768px) {

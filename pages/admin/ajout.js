@@ -66,8 +66,7 @@ export default function Ajout() {
   const approveProduct = async (productId) => {
   if (!confirm("Êtes-vous sûr de vouloir approuver ce produit ?")) return;
   try {
-    // Récupérer la demande
-    const {  error: fetchError } = await supabase
+    const { data: requestData, error: fetchError } = await supabase
       .from('requests')
       .select('*')
       .eq('id', productId)
@@ -75,11 +74,11 @@ export default function Ajout() {
 
     if (fetchError) throw fetchError;
 
-    // Nettoyer l'objet à insérer
-    const productToInsert = { ...rest };
+    // Copier requestData, retirer champs inutiles (ex: id, created_at, etc.)
+    const { id, created_at, ...productToInsert } = requestData;
 
     // Supprimer id_sellers si non défini (ou vide)
-    if (productToInsert.id_sellers === undefined) {
+    if (!productToInsert.id_sellers) {
       delete productToInsert.id_sellers;
     }
 
@@ -105,7 +104,6 @@ export default function Ajout() {
     console.error(error);
   }
 };
-
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = allRequests.slice(startIndex, startIndex + itemsPerPage);

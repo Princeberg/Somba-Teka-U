@@ -58,7 +58,7 @@ export default function AdminHeader() {
     },
     fr: {
       home: "Accueil",
-      demande:  "Ajouter un produit",
+      demande: "Ajouter un produit",
       view: "Mes produits",
       logout: "Déconnexion",
       language: "Langue",
@@ -74,14 +74,13 @@ export default function AdminHeader() {
     <>
       <header className="header" role="banner">
         <div className="container">
-          <div className="header-left">
-            <Link href="#">
-              <a className="logo" onClick={closeMenu} aria-label="SOMBA TEKA Home">
-                <span className="logo-main">SOMBA</span>
-                <span className="logo-accent">TEKA</span>
-              </a>
-            </Link>
-          </div>
+         <div className="header-left">
+  <Link href="#" className="logo" onClick={closeMenu} style={{textDecoration: 'none' }}>
+    <div className="logo-container">
+      <span className="logo-text">SOMBA<span className="logo-accent">TEKA</span></span>
+    </div>
+  </Link>
+</div>
 
           <div className="header-center">
             <nav
@@ -90,52 +89,45 @@ export default function AdminHeader() {
               aria-label="Main menu"
             >
               <ul>
-                <li>
-                  <Link href="/boutique/menu">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "/boutique/menu" ? "page" : undefined}
-                    >
-                     
-                      <span className="nav-text">{t.home}</span>
-                    </a>
+                <li >
+                  <Link
+                    href="/boutique/menu"
+                    onClick={closeMenu}
+                    className={`nav-link ${pathname === "/boutique/menu" ? "active" : ""}`} style={{color: 'black' }}
+                    aria-current={pathname === "/boutique/menu" ? "page" : undefined}
+                  >
+                    <span className="nav-text">{t.home}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/boutique/demande">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "/boutique/demande" ? "page" : undefined}
-                    >
-                     
-                      <span className="nav-text">{t.demande}</span>
-                    </a>
+                  <Link
+                    href="/boutique/demande"
+                    onClick={closeMenu}
+                    className={`nav-link ${pathname === "/boutique/demande" ? "active" : ""}`} style={{color: 'black' }} 
+                    aria-current={pathname === "/boutique/demande" ? "page" : undefined}
+                  >
+                    <span className="nav-text">{t.demande}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/boutique/view">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "/boutique/view" ? "page" : undefined}
-                    >
-                     
-                      <span className="nav-text">{t.view}</span>
-                    </a>
+                  <Link
+                    href="/boutique/view"
+                    onClick={closeMenu}
+                    className={`nav-link ${pathname === "/boutique/view" ? "active" : ""}`} style={{color: 'black' }} 
+                    aria-current={pathname === "/boutique/view" ? "page" : undefined}
+                  >
+                    <span className="nav-text">{t.view}</span>
                   </Link>
                 </li>
                 <li>
-                  <Link href="/logout">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "../logout" ? "page" : undefined}
-                    >
-                      <FontAwesomeIcon icon={faRightFromBracket} className="nav-icon" />
-                      <span className="nav-text">{t.logout}</span>
-                    </a>
+                  <Link
+                    href="/logout"
+                    onClick={closeMenu}
+                    className="nav-link" style={{color: 'black' }} 
+                    aria-current={pathname === "../logout" ? "page" : undefined}
+                  >
+                    <FontAwesomeIcon icon={faRightFromBracket} className="nav-icon" />
+                    <span className="nav-text">{t.logout}</span>
                   </Link>
                 </li>
               </ul>
@@ -144,14 +136,14 @@ export default function AdminHeader() {
 
           <div className="header-right">
             <div className="header-controls">
-              <button
+              {/* <button
                 onClick={toggleDarkMode}
                 className="mode-toggle"
                 aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
                 title={darkMode ? "Passer en mode clair" : "Passer en mode sombre"}
               >
                 <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
-              </button>
+              </button> */}
 
               <div className="language-switcher" aria-label={t.language}>
                 <button
@@ -205,29 +197,39 @@ export default function AdminHeader() {
       {/* Global Dark Mode Support */}
       <style jsx global>{`
         :root {
-          --primary-bg:   #f8f9fa;
+          --primary-bg: #f8f9fa;
           --secondary-bg: #f8f9fa;
           --text-color: #333333;
           --text-muted: #6c757d;
           --accent-color: #4caf50;
           --border-color: rgba(0, 0, 0, 0.1);
           --card-bg: #ffffff;
-          --container-bg:  #ffffff; 
+          --container-bg: #ffffff; 
           --hover-bg: rgba(0, 0, 0, 0.05);
           --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+           --logo-primary: #2d3748;
+    --logo-accent: #4caf50;
+    --nav-link-color: #4a5568;
+    --nav-link-hover: #3182ce;
+    --nav-link-active: #2b6cb0;
         }
 
         .dark {
           --primary-bg: rgba(15, 15, 25, 0.95);
-          --secondary-bg:rgba(15, 15, 25, 0.95);
+          --secondary-bg: rgba(15, 15, 25, 0.95);
           --text-color: white;
           --text-muted: #ccc;
           --accent-color: #5cb85c;
           --border-color: rgba(255, 255, 255, 0.1);
-          --card-bg:rgba(0, 0, 0, 0.1);
+          --card-bg: rgba(0, 0, 0, 0.1);
           --container-bg: rgba(0, 0, 0, 0.1);
           --hover-bg: rgba(255, 255, 255, 0.15);
           --shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+              --logo-primary: #f7fafc;
+    --logo-accent: #68d391;
+    --nav-link-color: #e2e8f0;
+    --nav-link-hover: #63b3ed;
+    --nav-link-active: #4299e1;
         }
 
         html, body {
@@ -274,6 +276,7 @@ export default function AdminHeader() {
           color: var(--accent-color);
           text-decoration: none;
           user-select: none;
+          display: flex;
         }
         .logo-accent {
           color: #333333;
@@ -296,6 +299,7 @@ export default function AdminHeader() {
         }
         nav.nav li {
           position: relative;
+          color: black; 
         }
         .nav-link {
           color: var(--text-color);
@@ -312,10 +316,10 @@ export default function AdminHeader() {
         .nav-link:hover,
         .nav-link:focus {
           color: white;
-          background:  #5cb85c;
+          background: #5cb85c;
           outline: none;
         }
-        .nav-link[aria-current="page"] {
+        .nav-link.active {
           font-weight: 700;
           border-bottom: 2px solid var(--accent-color);
         }
@@ -460,6 +464,7 @@ export default function AdminHeader() {
           .nav-link {
             padding: 1rem;
             font-size: 1.1rem;
+            color: black; 
           }
           .header-right {
             gap: 0.3rem;
@@ -471,6 +476,19 @@ export default function AdminHeader() {
             display: none;
           }
         }
+          /* Logo styles */
+  .logo-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--logo-accent); 
+  }
+  
+  .logo-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+    
       `}</style>
     </>
   );

@@ -84,16 +84,13 @@ export default function AdminMenu() {
           rel="stylesheet"
         />
         {/* Font Awesome */} 
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        />
+        
       </Head>
 
       <div className="site-wrap">
         <Header/>
 
-        <main className="container admin-container">
+        <main className="container admin-container"  >
           {/* Admin Header with Stats */}
           <div className="admin-header">
             <div className="header-content">

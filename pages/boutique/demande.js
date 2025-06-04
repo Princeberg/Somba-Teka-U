@@ -164,7 +164,7 @@ export default function AddProductPage() {
 
       <Header/>
       
-      <div className="container" style={{marginTop:'80px'}}>
+      <div className="container" style={{marginTop:'95px'}}>
         <div className="form-container">
             <h3>Ajout d&apos;un Nouveau Produit</h3>
             <p className="form-subtitle">Remplissez ce formulaire pour ajouter votre produit à notre plateforme</p>

@@ -28,20 +28,20 @@ export default function FeaturedAds() {
       <Swiper
         modules={[Navigation, Pagination, Autoplay]}
         loop={true}
-        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        autoplay={{ delay: 4000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
         navigation={true}
         slidesPerView={1}
         spaceBetween={20}
         centeredSlides={true}
-        style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}
+        style={{ width: "80%", maxWidth: "800px", margin: "0 auto" }}
       >
         {["concert.jpg", "d.jpg", "osiane.jpg", "t.jpg", "1.jpg"].map((img, index) => (
           <SwiperSlide key={index}>
             <img
               src={`/pub/${img}`}
               alt={`Publicité ${index + 1}`}
-              style={{ width: "100%", height: "auto", cursor: "pointer" }}
+              style={{ width: "80%", height: "auto", cursor: "pointer" }}
               onClick={() =>
                 openModal(
                   `/pub/${img}`,
@@ -80,63 +80,73 @@ export default function FeaturedAds() {
         </Link>
       </div>
 
-      {modalData.visible && (
-        <div 
-          id="myModal" 
-          className="modal"
-          style={{
-            display: "block",
-            position: "fixed",
-            zIndex: 1000,
-            left: 0,
-            top: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.9)",
-            overflow: "auto"
-          }}
-        >
-          <span 
-            className="close" 
-            onClick={closeModal}
-            style={{
-              position: "absolute",
-              top: "20px",
-              right: "35px",
-              color: "#f1f1f1",
-              fontSize: "40px",
-              fontWeight: "bold",
-              cursor: "pointer"
-            }}
-          >
-            &times;
-          </span>
-          <img 
-            className="modal-content" 
-            src={modalData.src} 
-            alt="Modal" 
-            style={{
-              display: "block",
-              margin: "60px auto",
-              maxWidth: "80%",
-              maxHeight: "80%"
-            }}
-          />
-          <div 
-            className="modal-description"
-            style={{
-              textAlign: "center",
-              color: "#fff",
-              padding: "10px 0",
-              fontSize: "18px",
-              maxWidth: "80%",
-              margin: "0 auto"
-            }}
-          >
-            {modalData.description}
-          </div>
-        </div>
-      )}
+     {modalData.visible && (
+  <div 
+    id="myModal" 
+    className="modal"
+    style={{
+      display: "block",
+      position: "fixed",
+      zIndex: 1000,
+      left: 0,
+      top: 0,
+      width: "100vw",
+      height: "100vh",
+      backgroundColor: "rgba(0,0,0,0.9)",
+      overflow: "auto",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "20px",
+    }}
+  >
+    <span 
+      className="close" 
+      onClick={closeModal}
+      style={{
+        position: "absolute",
+        top: "20px",
+        right: "35px",
+        color: "#f1f1f1",
+        fontSize: "40px",
+        fontWeight: "bold",
+        cursor: "pointer",
+        zIndex: 1010,
+      }}
+    >
+      &times;
+    </span>
+    <img 
+      className="modal-content" 
+      src={modalData.src} 
+      alt="Modal" 
+      style={{
+        display: "block",
+        margin: "0 auto",
+        maxWidth: "40%",
+        maxHeight: "auto",
+        height: "auto",
+        borderRadius: "8px",
+        boxShadow: "0 0 20px rgba(255,255,255,0.3)",
+      }}
+    />
+    <div 
+      className="modal-description"
+      style={{
+        textAlign: "center",
+        color: "#fff",
+        padding: "10px 0",
+        fontSize: "18px",
+        maxWidth: "80%",
+        margin: "20px auto 0 auto",
+        lineHeight: "1.4",
+      }}
+    >
+      {modalData.description}
+    </div>
+  </div>
+)}
 
       <style jsx>{`
         .featured-ads {
@@ -147,7 +157,7 @@ export default function FeaturedAds() {
         
         @media (max-width: 750px) {
           .modal-content {
-            max-width: 95% !important;
+            max-width: 20% !important;
           }
         }
       `}</style>

@@ -3,7 +3,7 @@ import Header from "@/components/Header2";
 import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import '@/styles/about.module.css';
+import Footer from "@/components/Footer";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function About() {
@@ -155,14 +155,108 @@ export default function About() {
                     <p><a href="https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER} " className="btn btn-light">Envoyer un message</a></p>
                   </div>
                 </div>
-                {/* <div className="text-center mt-4">
-                  <a href="https://t.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}" className="btn btn-primary">Envoyer un message</a>
-                </div> */}
               </div>
             </div>
           </div>
         </div>
       </section>
+      <Footer/>
+      <style jsx>{`
+  .section-title {
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+  }
+
+  .lead {
+    font-size: 1.25rem;
+    color: #333;
+    line-height: 1.6;
+  }
+
+  .about-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .about-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+
+  .icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+  }
+
+  .values-list {
+    list-style: none;
+    padding-left: 0;
+  }
+  .values-list li {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .values-list li strong {
+    color: #4CAF50;
+  }
+  .values-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #4CAF50;
+    font-weight: bold;
+  }
+
+  .contact-info {
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+  }
+  .contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+  .contact-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .btn-light {
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  .btn-light:hover {
+    background-color: #e0e0e0;
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2rem;
+    }
+    .about-card {
+      padding: 1.5rem;
+    }
+  }
+`}</style>
     </>
   );
 }

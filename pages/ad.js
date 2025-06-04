@@ -1,7 +1,8 @@
+// ... (importe les mêmes dépendances)
 import { useEffect } from 'react';
 import Head from 'next/head';
 import Header from "@/components/Header2";
-import '@/styles/ad.module.css';
+import Footer from "@/components/Footer";
 import Script from 'next/script';
 
 const AdPage = () => {
@@ -10,7 +11,7 @@ const AdPage = () => {
       new window.Swiper('.swiper', {
         loop: true,
         autoplay: {
-          delay: 900,
+          delay: 1000,
           disableOnInteraction: false,
           pauseOnMouseEnter: true,
         },
@@ -24,12 +25,11 @@ const AdPage = () => {
           onlyInViewport: true,
         },
         effect: 'slide',
-        speed: 300,
+        speed: 800,
         grabCursor: true,
       });
     }
 
-    // Modal logic
     const modal = document.getElementById("myModal");
     const modalImg = document.getElementById("img01");
     const modalDescription = document.getElementById("imgDescription");
@@ -37,7 +37,7 @@ const AdPage = () => {
 
     window.openModal = function (imgSrc, description) {
       if (modal && modalImg && modalDescription) {
-        modal.style.display = "block";
+        modal.style.display = "flex";
         modalImg.src = imgSrc;
         modalDescription.textContent = description;
         document.body.style.overflow = "hidden";
@@ -51,21 +51,16 @@ const AdPage = () => {
       }
     };
 
-    if (closeBtn) {
-      closeBtn.onclick = closeModal;
-    }
+    if (closeBtn) closeBtn.onclick = closeModal;
     modal?.addEventListener('click', e => {
       if (e.target === modal) closeModal();
     });
 
     document.addEventListener('keydown', e => {
-      if (e.key === "Escape" && modal?.style.display === "block") {
-        closeModal();
-      }
+      if (e.key === "Escape" && modal?.style.display === "flex") closeModal();
     });
 
     document.addEventListener('contextmenu', e => e.preventDefault());
-
   }, []);
 
   return (
@@ -79,16 +74,13 @@ const AdPage = () => {
       </Head>
 
       <Script src="https://unpkg.com/swiper@8/swiper-bundle.min.js" strategy="beforeInteractive" />
-
       <Header />
 
       <div className="site-wrap">
-        
-
         <section className="hero">
           <div className="container">
             <h1>Espace Publicitaire</h1>
-            <p>Augmentez votre visibilité et atteignez votre public cible avec nos solutions publicitaires premium</p>
+            <p>Augmentez votre visibilité avec nos solutions publicitaires premium</p>
           </div>
         </section>
 
@@ -99,9 +91,9 @@ const AdPage = () => {
                 {[
                   { src: "/pub/d.jpg", desc: "DIESEL GUCCI CONGO TOUR." },
                   { src: "/pub/t.jpg", desc: "Tournoi de FUSTAL" },
-                  { src: "/pub/1.jpg", desc: "SOMBA-TEKA La platforme de commerce Local. Achetez et Vendez en toute tranquillité au Congo-Brazzaville." },
-                  { src: "/pub/your.jpg", desc: "Nos formations sont conçues pour tous les niveaux..." },
-                  { src: "/pub/mouk.jpg", desc: "Promotion bilan de santé. Contact: +242 05 672-32-60" },
+                  { src: "/pub/1.jpg", desc: "SOMBA-TEKA - Achetez et Vendez au Congo-Brazzaville." },
+                  { src: "/pub/your.jpg", desc: "Formations accessibles à tous niveaux..." },
+                  { src: "/pub/mouk.jpg", desc: "Promotion bilan de santé. +242 05 672-32-60" },
                   { src: "/pub/osiane.jpg", desc: "..." },
                   { src: "/pub/gfdm.jpg", desc: "..." },
                   { src: "/pub/concert.jpg", desc: "..." },
@@ -119,10 +111,9 @@ const AdPage = () => {
 
         <section className="cta-section">
           <div className="container">
-            <h2 className="cta-title" style={{color: '#4CAF50'}}>Intéressé par nos espaces publicitaires ?</h2>
+            <h2 className="cta-title">Intéressé par nos espaces publicitaires ?</h2>
             <p className="cta-description">
               Profitez de notre audience engagée pour promouvoir votre marque, produit ou service.
-              Contactez-nous dès aujourd&apos;hui pour discuter des options disponibles.
             </p>
             <a
               href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
@@ -134,14 +125,144 @@ const AdPage = () => {
             </a>
           </div>
         </section>
+          <Footer />
 
-        {/* Modal */}
         <div id="myModal" className="modal">
           <span className="close">&times;</span>
           <img className="modal-content" id="img01" />
           <div className="modal-description" id="imgDescription"></div>
         </div>
       </div>
+    
+
+      <style jsx>{`
+        .site-wrap {
+          font-family: 'Segoe UI', sans-serif;
+          color: #333;
+          background: #f9f9f9;
+        }
+        .hero {
+          background: linear-gradient(120deg, #1f4037, #99f2c8);
+          color: white;
+          padding: 60px 20px;
+          text-align: center;
+        }
+        .hero h1 {
+          font-size: 2.8rem;
+          margin-bottom: 15px;
+        }
+        .hero p {
+          font-size: 1.2rem;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        .ad-gallery {
+          padding: 40px 0;
+        }
+        .swiper {
+          width: 100%;
+          height: auto;
+          padding: 20px 0;
+        }
+        .swiper-slide {
+          text-align: center;
+        }
+        .swiper-slide img {
+          width: 100%;
+          height: auto;
+          width: 600px; 
+          object-fit: cover;
+          border-radius: 12px;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+          cursor: pointer;
+          transition: transform 0.3s;
+        }
+        .swiper-slide img:hover {
+          transform: scale(1.03);
+        }
+
+        .cta-section {
+          background: #fff;
+          text-align: center;
+          padding: 60px 20px;
+        }
+        .cta-title {
+          font-size: 2rem;
+          margin-bottom: 15px;
+          color: #4CAF50;
+        }
+        .cta-description {
+          font-size: 1.1rem;
+          margin-bottom: 25px;
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .cta-button {
+          display: inline-block;
+          background: #25D366;
+          color: white;
+          padding: 14px 30px;
+          font-size: 1rem;
+          border-radius: 8px;
+          text-decoration: none;
+          transition: background 0.3s;
+        }
+        .cta-button:hover {
+          background: #1ebd5d;
+        }
+
+        .modal {
+          display: none;
+          position: fixed;
+          z-index: 9999;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.8);
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+        }
+        .modal-content {
+         height: auto;
+          width: 500px; 
+          border-radius: 12px;
+          box-shadow: 0 0 30px rgba(0,0,0,0.4);
+        }
+        .modal-description {
+          margin-top: 20px;
+          color: #fff;
+          font-size: 1.1rem;
+          text-align: center;
+        }
+        .close {
+          position: absolute;
+          top: 20px;
+          right: 30px;
+          color: white;
+          font-size: 2rem;
+          cursor: pointer;
+          z-index: 10000;
+        }
+
+        @media (max-width: 768px) {
+          .hero h1 {
+            font-size: 2rem;
+          }
+          .swiper-slide img {
+            max-height: 250px;
+          }
+          .cta-title {
+            font-size: 1.5rem;
+          }
+          .cta-description {
+            font-size: 1rem;
+          }
+        }
+      `}</style>
     </>
   );
 };

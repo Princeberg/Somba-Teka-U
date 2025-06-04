@@ -6,7 +6,6 @@ import supabase from '@/lib/supabase';
 import Header from '@/components/Header4';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'aos/dist/aos.css';
-import '@/styles/view.module.css';
 import useAuth from '@/lib/Auth';
 
 const AdminViews = () => {
@@ -120,7 +119,7 @@ const AdminViews = () => {
   return (
     <>
       <Header />
-      <div className="container" style={{ marginTop: '80px' }}>
+      <div className="container" style={{ marginTop: '90px' }}>
         <h1 className="page-title">Vue d&apos;ensemble des produits</h1>
 
         <div className="grid">
@@ -200,117 +199,101 @@ const AdminViews = () => {
         </div>
       )}
 
-      {/* Styles du modal */}
-      <style jsx>{`
-        .modal-overlay {
-          position: fixed;
-          top: 0; left: 0; width: 100%; height: 100%;
-          background: rgba(0,0,0,0.6);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 9999;
-        }
-        .modal-content {
-          background: white;
-          padding: 20px;
-          border-radius: 8px;
-          width: 320px;
-          box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-        select {
-          width: 100%;
-          padding: 8px;
-          margin-top: 10px;
-          font-size: 1rem;
-        }
-        button {
-          padding: 8px 12px;
-          font-size: 1rem;
-          cursor: pointer;
-        }
-        .delete-btn {
-          background-color: #e74c3c;
-          color: white;
-          border: none;
-          margin-top: 10px;
-          margin-right: 10px;
-        }
-        .boost-btn {
-          background-color: #3498db;
-          color: white;
-          border: none;
-          margin-top: 10px;
-        }
-      `}</style>
-
-      <style jsx>{`
+     <style jsx>{`
   .modal-overlay {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0,0,0,0.7);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 9999;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
   }
 
   .modal-content {
     background: #fff;
-    padding: 24px;
+    padding: 32px 28px;
     border-radius: 16px;
-    width: 360px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    width: 400px;
+    max-width: 90vw;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
+    gap: 18px;
+    transition: transform 0.25s ease;
   }
 
   .modal-content h2 {
-    font-size: 1.4rem;
-    font-weight: bold;
-    margin-bottom: 12px;
-    color: #333;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #222;
+    margin: 0 0 10px 0;
     text-align: center;
   }
 
   select {
     width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
+    padding: 14px 12px;
+    border-radius: 10px;
+    border: 2px solid #ddd;
+    font-size: 1.1rem;
     outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  select:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 8px #3498dbaa;
   }
 
   .modal-content p {
-    margin: 6px 0;
-    color: #555;
+    font-size: 1.1rem;
+    color: #444;
+    margin: 0;
   }
 
-  .modal-content button {
-    padding: 10px 16px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
+  button {
+    padding: 12px 18px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
     cursor: pointer;
-    transition: background 0.2s ease;
+    border: none;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .modal-content button:disabled {
+  button:disabled {
     background: #ccc;
     cursor: not-allowed;
+    box-shadow: none;
   }
 
   .modal-content button:first-of-type {
     background-color: #28a745;
     color: white;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.6);
+  }
+  .modal-content button:first-of-type:hover:not(:disabled) {
+    background-color: #218838;
+    box-shadow: 0 6px 18px rgba(33, 136, 56, 0.8);
   }
 
   .modal-content button:last-of-type {
     background-color: #e74c3c;
     color: white;
+    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.6);
+  }
+  .modal-content button:last-of-type:hover {
+    background-color: #c0392b;
+    box-shadow: 0 6px 18px rgba(192, 57, 43, 0.8);
   }
 
   .delete-btn {
@@ -319,8 +302,9 @@ const AdminViews = () => {
     border: none;
     margin-top: 10px;
     margin-right: 10px;
-    border-radius: 8px;
-    padding: 8px 12px;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 600;
   }
 
   .boost-btn {
@@ -328,8 +312,125 @@ const AdminViews = () => {
     color: white;
     border: none;
     margin-top: 10px;
+    border-radius: 12px;
+    padding: 10px 16px;
+    font-weight: 600;
+  }
+`}</style>
+
+
+  <style jsx>{`
+  .page-title {
+    font-size: 2rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+  }
+
+  grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* smaller card width */
+    gap: 16px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    max-width: 300px;  /* smaller max width */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    font-size: 1.1rem; /* smaller title font */
+    margin-bottom: 6px;
+  }
+
+  .card-tag {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 6px;
+  }
+
+  .card-desc {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    flex-grow: 1;
+  }
+
+  .card-info > div {
+    font-size: 0.8rem;
+    margin-bottom: 4px;
+  }
+
+  .card-images img {
+    width: 80px;  
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 6px;
+  }
+
+  .delete-btn,
+  .boost-btn {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 1rem;
+    font-weight: 500;
     border-radius: 8px;
-    padding: 8px 12px;
+    border: none;
+    margin-top: 8px;
+    transition: background 0.2s ease;
+  }
+
+  .delete-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+
+  .delete-btn:hover {
+    background-color: #c82333;
+  }
+
+  .boost-btn {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .boost-btn:hover {
+    background-color: #0056b3;
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    gap: 12px;
+  }
+
+  .pagination button {
+    padding: 8px 14px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: none;
+    background-color: #6c63ff;
+    color: white;
+    cursor: pointer;
+  }
+
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .pagination span {
+    font-weight: 500;
+    font-size: 1rem;
   }
 `}</style>
 

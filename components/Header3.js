@@ -79,146 +79,145 @@ export default function AdminHeader() {
   return (
     <>
       <header className="header" role="banner">
-        <div className="container">
-          <div className="header-left">
-            <Link href="#">
-              <a className="logo" onClick={closeMenu} aria-label="SOMBA TEKA Home">
-                <span className="logo-main">SOMBA</span>
-                <span className="logo-accent">TEKA</span>
-              </a>
+  <div className="container">
+    {/* <div className="header-left">
+      <Link
+        href="#"
+        onClick={closeMenu}
+        className="logo" style={{textDecoration: 'none' }} 
+        aria-label="SOMBA TEKA Home"
+      >
+        <span className="logo-main">SOMBA</span>
+        <span className="logo-accent">TEKA</span>
+      </Link>
+    </div> */}
+
+    <div className="header-center">
+      <nav
+        id="primary-navigation"
+        className={`nav ${isOpen ? "nav--open" : ""}`}
+        aria-label="Main menu"
+      >
+        <ul>
+          <li>
+            <Link
+              href="/admin/menu"
+              onClick={closeMenu}
+              className="nav-link"
+              aria-current={pathname === "/admin/menu" ? "page" : undefined} style={{color: 'black' }}
+            >
+              <FontAwesomeIcon icon={faHome} className="nav-icon" />
+              <span className="nav-text">{t.home}</span>
             </Link>
-          </div>
-
-          <div className="header-center">
-            <nav
-              id="primary-navigation"
-              className={`nav ${isOpen ? "nav--open" : ""}`}
-              aria-label="Main menu"
+          </li>
+          <li>
+            <Link
+              href="/admin/ajout"
+              onClick={closeMenu}
+              className="nav-link"
+              aria-current={pathname === "/admin/ajout" ? "page" : undefined} style={{color: 'black' }}
             >
-              <ul>
-                <li>
-                  <Link href="/admin/menu">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "/admin/menu" ? "page" : undefined}
-                    >
-                      <FontAwesomeIcon icon={faHome} className="nav-icon" />
-                      <span className="nav-text">{t.home}</span>
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/admin/ajout">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "/admin/ajout" ? "page" : undefined}
-                    >
-                      <FontAwesomeIcon icon={faStore} className="nav-icon" />
-                      <span className="nav-text">{t.ajout}</span>
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/admin/view">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "/admin/view" ? "page" : undefined}
-                    >
-                      <FontAwesomeIcon icon={faBullhorn} className="nav-icon" />
-                      <span className="nav-text">{t.views}</span>
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/admin/vendeur">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "/admin/vendeur" ? "page" : undefined}
-                    >
-                      <FontAwesomeIcon icon={faInfoCircle} className="nav-icon" />
-                      <span className="nav-text">{t.vendeurs}</span>
-                    </a>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/logout">
-                    <a
-                      onClick={closeMenu}
-                      className="nav-link"
-                      aria-current={pathname === "../logout" ? "page" : undefined}
-                    >
-                      <FontAwesomeIcon icon={faRightFromBracket} className="nav-icon" />
-                      <span className="nav-text">{t.logout}</span>
-                    </a>
-                  </Link>
-                </li>
-              </ul>
-            </nav>
-          </div>
-
-          <div className="header-right">
-            <div className="header-controls">
-              <button
-                onClick={toggleDarkMode}
-                className="mode-toggle"
-                aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
-                title={darkMode ? "Passer en mode clair" : "Passer en mode sombre"}
-              >
-                <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
-              </button>
-
-              <div className="language-switcher" aria-label={t.language}>
-                <button
-                  className={`language-btn ${language === "fr" ? "active" : ""}`}
-                  onClick={() => changeLanguage("fr")}
-                  aria-pressed={language === "fr"}
-                  aria-label="Changer la langue en français"
-                  title="Français"
-                >
-                  FR
-                </button>
-                <span className="language-separator" aria-hidden="true">
-                  |
-                </span>
-                <button
-                  className={`language-btn ${language === "en" ? "active" : ""}`}
-                  onClick={() => changeLanguage("en")}
-                  aria-pressed={language === "en"}
-                  aria-label="Switch language to English"
-                  title="English"
-                >
-                  EN
-                </button>
-              </div>
-            </div>
-
-            <button
-              className={`hamburger ${isOpen ? "hamburger--open" : ""}`}
-              onClick={toggleMenu}
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isOpen}
-              aria-controls="primary-navigation"
+              <FontAwesomeIcon icon={faStore} className="nav-icon" />
+              <span className="nav-text">{t.ajout}</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/view"
+              onClick={closeMenu}
+              className="nav-link"
+              aria-current={pathname === "/admin/view" ? "page" : undefined} style={{color: 'black' }}
             >
-              <span className="hamburger-line" />
-              <span className="hamburger-line" />
-              <span className="hamburger-line" />
-            </button>
-          </div>
+              <FontAwesomeIcon icon={faBullhorn} className="nav-icon" />
+              <span className="nav-text">{t.views}</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/admin/vendeur"
+              onClick={closeMenu}
+              className="nav-link"
+              aria-current={pathname === "/admin/vendeur" ? "page" : undefined} style={{color: 'black' }}
+            >
+              <FontAwesomeIcon icon={faInfoCircle} className="nav-icon" />
+              <span className="nav-text">{t.vendeurs}</span>
+            </Link>
+          </li>
+          <li>
+            <Link
+              href="/logout"
+              onClick={closeMenu}
+              className="nav-link"
+              aria-current={pathname === "/logout" ? "page" : undefined} style={{color: 'black' }}
+            >
+              <FontAwesomeIcon icon={faRightFromBracket} className="nav-icon" />
+              <span className="nav-text">{t.logout}</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div className="header-right">
+      {/* <div className="header-controls">
+        <button
+          onClick={toggleDarkMode}
+          className="mode-toggle"
+          aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          title={darkMode ? "Passer en mode clair" : "Passer en mode sombre"}
+        >
+          <FontAwesomeIcon icon={darkMode ? faSun : faMoon} />
+        </button>
+
+        <div className="language-switcher" aria-label={t.language}>
+          <button
+            className={`language-btn ${language === "fr" ? "active" : ""}`}
+            onClick={() => changeLanguage("fr")}
+            aria-pressed={language === "fr"}
+            aria-label="Changer la langue en français"
+            title="Français"
+          >
+            FR
+          </button>
+          <span className="language-separator" aria-hidden="true">
+            |
+          </span>
+          <button
+            className={`language-btn ${language === "en" ? "active" : ""}`}
+            onClick={() => changeLanguage("en")}
+            aria-pressed={language === "en"}
+            aria-label="Switch language to English"
+            title="English"
+          >
+            EN
+          </button>
         </div>
+      </div> */}
 
-        {/* Overlay for mobile menu */}
-        {isOpen && (
-          <div
-            className="menu-overlay"
-            onClick={handleOverlayClick}
-            aria-hidden="true"
-          />
-        )}
-      </header>
+      <button
+        className={`hamburger ${isOpen ? "hamburger--open" : ""}`}
+        onClick={toggleMenu}
+        aria-label={isOpen ? "Close menu" : "Open menu"}
+        aria-expanded={isOpen}
+        aria-controls="primary-navigation"
+      >
+        <span className="hamburger-line" />
+        <span className="hamburger-line" />
+        <span className="hamburger-line" />
+      </button>
+    </div>
+  </div>
+
+  {/* Overlay for mobile menu */}
+  {isOpen && (
+    <div
+      className="menu-overlay"
+      onClick={handleOverlayClick}
+      aria-hidden="true"
+    />
+  )}
+</header>
+
 
       {/* Global Dark Mode Support */}
       <style jsx global>{`
