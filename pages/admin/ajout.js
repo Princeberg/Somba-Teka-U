@@ -5,7 +5,6 @@ import supabase from '@/lib/supabase';
 import Header from '@/components/Header3';
 import { Inter, Poppins } from 'next/font/google';
 import 'aos/dist/aos.css';
-import '@/styles/ajout.module.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
