@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import supabase from '@/lib/supabase';
 import Head from 'next/head';
+import Link from 'next/link';
 import Header from '@/components/Header4';
 import 'aos/dist/aos.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,7 +16,6 @@ export default function AdminMenu() {
     activeSellers: 0,
   });
 
-  
   const fetchStats = async (sellerId) => {
     try {
       const { count: activeProducts } = await supabase
@@ -28,34 +28,25 @@ export default function AdminMenu() {
         activeSellers: 1,
       });
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error('Erreur lors de la récupération des statistiques :', error);
     }
   };
 
   useEffect(() => {
-      const checkAuth = async () => {
-        const { data: { user }, error } = await supabase.auth.getUser();
-  
-        if (error || !user) {
-          router.push('/');
-        } else {
-          setUserEmail(user.email);
-          fetchStats();
-          setLoading(false);
-        }
-      };
+    const checkAuth = async () => {
+      const { data, error } = await supabase.auth.getUser();
+
+      if (error || !data?.user) {
+        router.push('/');
+      } else {
+        const user = data.user;
+        setUserEmail(user.email);
+        await fetchStats(user.id); 
+        setLoading(false);
+      }
+    };
     checkAuth();
   }, [router]);
-
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      alert("Une erreur s'est produite lors de la déconnexion.");
-      console.error('Logout error:', error);
-    } else {
-      router.push('/');
-    }
-  };
 
   if (loading) {
     return (
@@ -102,10 +93,15 @@ export default function AdminMenu() {
                 <i className="fas fa-user-shield"></i>
               </div>
               <div className="user-details">
-                <span className="user-email">{userEmail}</span>
-                <button onClick={handleLogout} className="logout-btn">
-                  <i className="fas fa-sign-out-alt"></i> Déconnexion
-                </button>
+                <span className="">{userEmail}</span>
+               <Link    style={{ textDecoration:'none', color: 'white' }}
+  href={`https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="assistance-btn"
+>
+  <i className="fas fa-headset"></i> Besoin d'assistance
+</Link>
               </div>
             </div>
           </div>
@@ -119,7 +115,7 @@ export default function AdminMenu() {
                 </div>
                 <div className="stat-content">
                   <h3>{stats.activeProducts}</h3>
-                  <p> Total produits </p>
+                  <p> Total de vos produits </p>
                 </div>
               </div>
             </div>
@@ -171,27 +167,6 @@ export default function AdminMenu() {
       </div>
 
       <style jsx>{`
-        :root {
-          --primary-color: #4e73df;
-          --primary-light: #e8f0fe;
-          --secondary-color: #4CAF50;
-          --secondary-light: #e6f7f0;
-          --warning-color: #f6c23e;
-          --warning-light: #fef8e6;
-          --danger-color: #e74a3b;
-          --danger-light: #fdecea;
-          --dark-color: #5a5c69;
-          --light-color: #f8f9fc;
-          --gray-color: #dddfeb;
-          --white-color: #ffffff;
-        }
-        
-        body {
-          background-color: white;
-          font-family: 'Inter', sans-serif;
-          color:  #4CAF50;
-          min-height: 100vh;
-        }
         
         .loading-screen {
           display: flex;
@@ -520,6 +495,25 @@ export default function AdminMenu() {
             justify-content: center;
           }
         }
+          .assistance-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #25d366;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.assistance-btn:hover {
+  background-color: #1ebc59;
+  color: white;
+}
+
       `}</style>
     </>
   );

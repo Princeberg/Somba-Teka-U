@@ -10,6 +10,7 @@ export default function About() {
   useEffect(() => {
     AOS.init({ duration: 800, easing: 'ease-in-out', once: true });
   }, []);
+  
 
   return (
     <>
@@ -85,7 +86,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="py-5 bg-light">
+      <section className="py-5">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 mx-auto text-center">
@@ -161,6 +162,8 @@ export default function About() {
         </div>
       </section>
       <Footer/>
+
+      
       <style jsx>{`
   .section-title {
     font-weight: 700;
@@ -171,12 +174,20 @@ export default function About() {
 
   .lead {
     font-size: 1.25rem;
-    color: #333;
     line-height: 1.6;
   }
 
   .about-card {
     background: white;
+    color: black; 
+    padding: 2rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+    .about-card:after {
+    background: :  #111827;
+    color: white; 
     padding: 2rem;
     border-radius: 0.5rem;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);

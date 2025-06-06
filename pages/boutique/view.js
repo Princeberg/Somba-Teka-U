@@ -10,12 +10,12 @@ import useAuth from '@/lib/Auth';
 
 const AdminViews = () => {
   const router = useRouter();
-  const { user, loading } = useAuth(); // useAuth doit retourner { user, loading }
+  const { user, loading } = useAuth();
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 9;
 
-  // États pour le modal boost
+  // Boost modal states
   const [showBoostModal, setShowBoostModal] = useState(false);
   const [boostProductId, setBoostProductId] = useState(null);
   const [boostOption, setBoostOption] = useState(null);
@@ -54,6 +54,9 @@ const AdminViews = () => {
   };
 
   const deleteProduct = async (id) => {
+    const confirmDelete = window.confirm('Êtes-vous sûr de vouloir supprimer ce produit?');
+    if (!confirmDelete) return;
+    
     const { error } = await supabase.from('produits').delete().eq('id', id);
     if (error) {
       console.error('Erreur lors de la suppression du produit:', error);
@@ -62,8 +65,7 @@ const AdminViews = () => {
     }
   };
 
-  // --- Fonctions Boost ---
-
+  // Boost functions
   const openBoostModal = (productId) => {
     setBoostProductId(productId);
     setBoostOption(null);
@@ -79,7 +81,7 @@ const AdminViews = () => {
     } else if (option.weeks) {
       now.setDate(now.getDate() + option.weeks * 7);
     }
-    return now.toISOString().split('T')[0]; // format YYYY-MM-DD
+    return now.toISOString().split('T')[0];
   };
 
   const onBoostOptionChange = (optionId) => {
@@ -95,20 +97,25 @@ const AdminViews = () => {
     }
   };
 
- const saveBoost = () => {
-  if (!boostOption || !boostProductId) {
-    return alert('Veuillez choisir une option de boost.');
-  }
+  const saveBoost = () => {
+    if (!boostOption || !boostProductId) {
+      return alert('Veuillez choisir une option de boost.');
+    }
 
-  sessionStorage.setItem('ProductId', boostProductId); 
-  sessionStorage.setItem('boost', boostOption.months || boostOption.weeks); 
-  sessionStorage.setItem('tarif', boostPrice);
-  sessionStorage.setItem('BoostEnd', boostEndDate);
+    sessionStorage.setItem('ProductId', boostProductId); 
+    sessionStorage.setItem('boost', boostOption.months || boostOption.weeks); 
+    sessionStorage.setItem('tarif', boostPrice);
+    sessionStorage.setItem('BoostEnd', boostEndDate);
 
-  router.push('/boutique/ActivationScreen');
-};
+    router.push('/boutique/ActivationScreen');
+  };
 
-
+  // Check if product is boosted
+  const isBoosted = (product) => {
+    if (!product.BoostEnd) return false;
+    const endDate = new Date(product.BoostEnd);
+    return endDate > new Date();
+  };
 
   // Pagination
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -119,321 +126,573 @@ const AdminViews = () => {
   return (
     <>
       <Header />
-      <div className="container" style={{ marginTop: '90px' }}>
-        <h1 className="page-title">Vue d&apos;ensemble des produits</h1>
+      <div className="admin-views-container">
+        <h1 className="page-title">Vue d'ensemble des produits</h1>
+        <p className="page-subtitle">Gérez et boostez vos produits pour augmenter leur visibilité</p>
 
-        <div className="grid">
-          {currentProducts.map((product) => (
-            <div key={product.id} className="card">
-              <h3 className="card-title">{product.productName}</h3>
-              <span className="card-tag">{product.categorie}</span>
-              <p className="card-desc">{product.description}</p>
+        {products.length === 0 ? (
+          <div className="no-products">
+            <img src="/empty-state.svg" alt="No products" className="empty-image" />
+            <p>Vous n'avez aucun produit pour le moment</p>
+            <button className="add-product-btn" onClick={() => router.push('/add-product')}>
+              Ajouter un produit
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="products-grid">
+              {currentProducts.map((product) => (
+                <div key={product.id} className="product-card">
+                  <div className="product-images">
+                    {[product.productPicture1, product.productPicture2, product.productPicture3]
+                      .filter(Boolean)
+                      .map((img, index) => (
+                        <img key={index} src={img} alt={`Image ${index + 1}`} />
+                      ))}
+                  </div>
 
-              <div className="card-info">
-                <div><strong>Prix:</strong> {product.price} FCFA</div>
-                <div><strong>Nombre de vues:</strong> {product.vues}</div>
-                <div><strong>Fin du Boost :</strong> {product.BoostEnd || 'Pas de Boost actif'}   </div>
-                {product.boost_end_date && (
-                  <div><strong>Boost actif jusqu&apos;au:</strong> {product.BoostEnd}</div>
-                )}
-              </div>
+                  <div className="product-content">
+                    <div className="product-header">
+                      <h3 className="product-title">{product.productName}</h3>
+                      <span className={`boost-status ${isBoosted(product) ? 'boosted' : 'not-boosted'}`}>
+                        {isBoosted(product) ? 'Boosté' : 'Non boosté'}
+                      </span>
+                    </div>
 
-              <div className="card-images">
-                {[product.productPicture1, product.productPicture2, product.productPicture3]
-                  .filter(Boolean)
-                  .map((img, index) => (
-                    <img key={index} src={img} alt={`Image ${index + 1}`} />
-                  ))}
-              </div>
+                    <span className="product-category">{product.categorie}</span>
+                    <p className="product-description">{product.description}</p>
 
-              <button className="delete-btn" onClick={() => deleteProduct(product.id)}>
-                Supprimer
-              </button>
+                    <div className="product-meta">
+                      <div className="meta-item">
+                        <span className="meta-label">Prix:</span>
+                        <span className="meta-value">{product.price} FCFA</span>
+                      </div>
+                      <div className="meta-item">
+                        <span className="meta-label">Vues:</span>
+                        <span className="meta-value">{product.vues}</span>
+                      </div>
+                      {isBoosted(product) && (
+                        <div className="meta-item">
+                          <span className="meta-label">Fin du boost:</span>
+                          <span className="meta-value">{new Date(product.BoostEnd).toLocaleDateString()}</span>
+                        </div>
+                      )}
+                    </div>
 
-              <button className="boost-btn" onClick={() => openBoostModal(product.id)}>
-                Booster
-              </button>
-            </div>
-          ))}
-        </div>
-
-        <div className="pagination">
-          <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
-            Précédent
-          </button>
-          <span>
-            Page {currentPage} / {totalPages}
-          </span>
-          <button onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
-            Suivant
-          </button>
-        </div>
-      </div>
-
-      {/* Modal Boost */}
-      {showBoostModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h2>Choisir la durée du Boost</h2>
-            <select onChange={e => onBoostOptionChange(e.target.value)} value={boostOption?.id || ''}>
-              <option value="">-- Sélectionnez une option --</option>
-              {boostOptions.map(option => (
-                <option key={option.id} value={option.id}>
-                  {option.label} - {option.price} FCFA
-                </option>
+                    <div className="product-actions">
+                      <button className="action-btn delete-btn" onClick={() => deleteProduct(product.id)}>
+                        Supprimer
+                      </button>
+                      <button className="action-btn boost-btn" onClick={() => openBoostModal(product.id)}>
+                        Booster
+                      </button>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </select>
+            </div>
 
-            {boostOption && (
-              <div style={{ marginTop: '10px' }}>
-                <p><strong>Prix:</strong> {boostPrice} FCFA</p>
-                <p><strong>Date de fin du boost:</strong> {boostEndDate}</p>
+            {totalPages > 1 && (
+              <div className="pagination">
+                <button 
+                  onClick={() => setCurrentPage(currentPage - 1)} 
+                  disabled={currentPage === 1}
+                  className="pagination-btn"
+                >
+                  &larr; Précédent
+                </button>
+                <span className="page-indicator">
+                  Page {currentPage} sur {totalPages}
+                </span>
+                <button 
+                  onClick={() => setCurrentPage(currentPage + 1)} 
+                  disabled={currentPage === totalPages}
+                  className="pagination-btn"
+                >
+                  Suivant &rarr;
+                </button>
               </div>
             )}
+          </>
+        )}
 
-            <button disabled={!boostOption} onClick={saveBoost} style={{ marginRight: '10px' }}>
-              Paiement
-            </button>
-            <button onClick={() => setShowBoostModal(false)}>Annuler</button>
+        {/* Boost Modal */}
+        {showBoostModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button className="modal-close" onClick={() => setShowBoostModal(false)}>
+                &times;
+              </button>
+              <h2 className="modal-title">Boostez votre produit</h2>
+              <p className="modal-subtitle">Choisissez la durée du boost pour augmenter la visibilité</p>
+
+              <div className="form-group">
+                <label htmlFor="boost-option" className="form-label">Option de boost</label>
+                <select 
+                  id="boost-option"
+                  onChange={e => onBoostOptionChange(e.target.value)} 
+                  value={boostOption?.id || ''}
+                  className="form-select"
+                >
+                  <option value="">-- Sélectionnez une option --</option>
+                  {boostOptions.map(option => (
+                    <option key={option.id} value={option.id}>
+                      {option.label} - {option.price} FCFA
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {boostOption && (
+                <div className="boost-summary">
+                  <div className="summary-item">
+                    <span className="summary-label">Durée:</span>
+                    <span className="summary-value">{boostOption.label}</span>
+                  </div>
+                  <div className="summary-item">
+                    <span className="summary-label">Prix:</span>
+                    <span className="summary-value">{boostPrice} FCFA</span>
+                  </div>
+                  <div className="summary-item">
+                    <span className="summary-label">Fin du boost:</span>
+                    <span className="summary-value">{new Date(boostEndDate).toLocaleDateString()}</span>
+                  </div>
+                </div>
+              )}
+
+              <div className="modal-actions">
+                <button 
+                  className="modal-btn primary-btn" 
+                  onClick={saveBoost} 
+                  disabled={!boostOption}
+                >
+                  Procéder au paiement
+                </button>
+                <button 
+                  className="modal-btn secondary-btn" 
+                  onClick={() => setShowBoostModal(false)}
+                >
+                  Annuler
+                </button>
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-     <style jsx>{`
-  .modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.7);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    backdrop-filter: blur(4px);
-    animation: fadeIn 0.3s ease forwards;
-  }
+      <style jsx>{`
 
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
+        .page-title {
+          font-size: 2rem;
+          font-weight: 700;
+          text-align: center;
+          margin-bottom: 8px;
+        }
 
-  .modal-content {
-    background: #fff;
-    padding: 32px 28px;
-    border-radius: 16px;
-    width: 400px;
-    max-width: 90vw;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    transition: transform 0.25s ease;
-  }
+        .page-subtitle {
+          text-align: center;
+          margin-bottom: 40px;
+          font-size: 1.1rem;
+        }
 
-  .modal-content h2 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #222;
-    margin: 0 0 10px 0;
-    text-align: center;
-  }
+        .no-products {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 40px 20px;
+          text-align: center;
+          border-radius: 12px;
+        }
 
-  select {
-    width: 100%;
-    padding: 14px 12px;
-    border-radius: 10px;
-    border: 2px solid #ddd;
-    font-size: 1.1rem;
-    outline: none;
-    transition: border-color 0.3s ease;
-  }
+        .empty-image {
+          width: 200px;
+          height: auto;
+          margin-bottom: 20px;
+          opacity: 0.7;
+        }
 
-  select:focus {
-    border-color: #3498db;
-    box-shadow: 0 0 8px #3498dbaa;
-  }
+        .add-product-btn {
+          background-color: #3498db;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 8px;
+          font-weight: 600;
+          margin-top: 20px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
 
-  .modal-content p {
-    font-size: 1.1rem;
-    color: #444;
-    margin: 0;
-  }
+        .add-product-btn:hover {
+          background-color: #2980b9;
+        }
 
-  button {
-    padding: 12px 18px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 12px;
-    cursor: pointer;
-    border: none;
-    transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  }
+        .products-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          gap: 24px;
+        }
 
-  button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    box-shadow: none;
-  }
+        .product-card {
+          background: white;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+          transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-  .modal-content button:first-of-type {
-    background-color: #28a745;
-    color: white;
-    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.6);
-  }
-  .modal-content button:first-of-type:hover:not(:disabled) {
-    background-color: #218838;
-    box-shadow: 0 6px 18px rgba(33, 136, 56, 0.8);
-  }
+        .product-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
 
-  .modal-content button:last-of-type {
-    background-color: #e74c3c;
-    color: white;
-    box-shadow: 0 4px 12px rgba(231, 76, 60, 0.6);
-  }
-  .modal-content button:last-of-type:hover {
-    background-color: #c0392b;
-    box-shadow: 0 6px 18px rgba(192, 57, 43, 0.8);
-  }
+        .product-images {
+          display: flex;
+          height: 180px;
+          overflow: hidden;
+          border-bottom: 1px solid #eee;
+        }
 
-  .delete-btn {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    margin-top: 10px;
-    margin-right: 10px;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-weight: 600;
-  }
+        .product-images img {
+          flex: 1;
+          object-fit: cover;
+          min-width: 0;
+          height: 100%;
+        }
 
-  .boost-btn {
-    background-color: #3498db;
-    color: white;
-    border: none;
-    margin-top: 10px;
-    border-radius: 12px;
-    padding: 10px 16px;
-    font-weight: 600;
-  }
-`}</style>
+        .product-content {
+          padding: 16px;
+        }
 
+        .product-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8px;
+        }
 
-  <style jsx>{`
-  .page-title {
-    font-size: 2rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 30px;
-    color: #333;
-  }
+        .product-title {
+          font-size: 1.2rem;
+          font-weight: 600;
+          margin: 0;
+          color: #2c3e50;
+          flex: 1;
+        }
 
-  grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* smaller card width */
-    gap: 16px;
-  }
+        .boost-status {
+          font-size: 0.75rem;
+          font-weight: 600;
+          padding: 4px 8px;
+          border-radius: 12px;
+          margin-left: 8px;
+        }
 
-  .card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    max-width: 300px;  /* smaller max width */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+        .boost-status.boosted {
+          background-color: #27ae60;
+          color: white;
+        }
 
-  .card-title {
-    font-size: 1.1rem; /* smaller title font */
-    margin-bottom: 6px;
-  }
+        .boost-status.not-boosted {
+          background-color: #e74c3c;
+          color: white;
+        }
 
-  .card-tag {
-    font-size: 0.8rem;
-    color: #666;
-    margin-bottom: 6px;
-  }
+        .product-category {
+          display: inline-block;
+          font-size: 0.8rem;
+          color: #7f8c8d;
+          margin-bottom: 8px;
+          background: #f1f2f6;
+          padding: 2px 8px;
+          border-radius: 4px;
+        }
 
-  .card-desc {
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-    flex-grow: 1;
-  }
+        .product-description {
+          font-size: 0.9rem;
+          color: #34495e;
+          margin: 8px 0 16px;
+          line-height: 1.5;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
 
-  .card-info > div {
-    font-size: 0.8rem;
-    margin-bottom: 4px;
-  }
+        .product-meta {
+          margin-bottom: 16px;
+        }
 
-  .card-images img {
-    width: 80px;  
-    height: 60px;
-    object-fit: cover;
-    border-radius: 6px;
-    margin-right: 6px;
-  }
+        .meta-item {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 6px;
+        }
 
-  .delete-btn,
-  .boost-btn {
-    width: 100%;
-    padding: 10px 16px;
-    font-size: 1rem;
-    font-weight: 500;
-    border-radius: 8px;
-    border: none;
-    margin-top: 8px;
-    transition: background 0.2s ease;
-  }
+        .meta-label {
+          font-weight: 600;
+          color: #7f8c8d;
+          font-size: 0.85rem;
+        }
 
-  .delete-btn {
-    background-color: #dc3545;
-    color: white;
-  }
+        .meta-value {
+          color: #2c3e50;
+          font-size: 0.85rem;
+        }
 
-  .delete-btn:hover {
-    background-color: #c82333;
-  }
+        .product-actions {
+          display: flex;
+          gap: 8px;
+        }
 
-  .boost-btn {
-    background-color: #007bff;
-    color: white;
-  }
+        .action-btn {
+          flex: 1;
+          padding: 8px 12px;
+          border: none;
+          border-radius: 6px;
+          font-weight: 600;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
 
-  .boost-btn:hover {
-    background-color: #0056b3;
-  }
+        .delete-btn {
+          background-color: #e74c3c;
+          color: white;
+        }
 
-  .pagination {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 30px;
-    gap: 12px;
-  }
+        .delete-btn:hover {
+          background-color: #c0392b;
+        }
 
-  .pagination button {
-    padding: 8px 14px;
-    font-size: 1rem;
-    border-radius: 8px;
-    border: none;
-    background-color: #6c63ff;
-    color: white;
-    cursor: pointer;
-  }
+        .boost-btn {
+          background-color: #3498db;
+          color: white;
+        }
 
-  .pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
+        .boost-btn:hover {
+          background-color: #2980b9;
+        }
 
-  .pagination span {
-    font-weight: 500;
-    font-size: 1rem;
-  }
-`}</style>
+        .pagination {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin-top: 40px;
+          gap: 16px;
+        }
 
+        .pagination-btn {
+          padding: 8px 16px;
+          background-color: #3498db;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+
+        .pagination-btn:disabled {
+          background-color: #bdc3c7;
+          cursor: not-allowed;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+          background-color: #2980b9;
+        }
+
+        .page-indicator {
+          font-size: 0.9rem;
+          color: #7f8c8d;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1000;
+          backdrop-filter: blur(5px);
+          animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .modal-content {
+          background: white;
+          border-radius: 12px;
+          width: 100%;
+          max-width: 500px;
+          padding: 24px;
+          position: relative;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-close {
+          position: absolute;
+          top: 16px;
+          right: 16px;
+          background: none;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: #7f8c8d;
+          padding: 4px;
+        }
+
+        .modal-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: #2c3e50;
+        }
+
+        .modal-subtitle {
+          font-size: 0.95rem;
+          color: #7f8c8d;
+          margin-bottom: 24px;
+        }
+
+        .form-group {
+          margin-bottom: 20px;
+        }
+
+        .form-label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 600;
+          color: #2c3e50;
+          font-size: 0.9rem;
+        }
+
+        .form-select {
+          width: 100%;
+          padding: 10px 12px;
+          border: 1px solid #ddd;
+          border-radius: 6px;
+          font-size: 1rem;
+          transition: border-color 0.2s;
+        }
+
+        .form-select:focus {
+          border-color: #3498db;
+          outline: none;
+          box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .boost-summary {
+          background: #f8f9fa;
+          border-radius: 8px;
+          padding: 16px;
+          margin-bottom: 24px;
+        }
+
+        .summary-item {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 8px;
+        }
+
+        .summary-item:last-child {
+          margin-bottom: 0;
+        }
+
+        .summary-label {
+          font-weight: 600;
+          color: #7f8c8d;
+        }
+
+        .summary-value {
+          color: #2c3e50;
+        }
+
+        .modal-actions {
+          display: flex;
+          gap: 12px;
+        }
+
+        .modal-btn {
+          flex: 1;
+          padding: 12px;
+          border-radius: 6px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .primary-btn {
+          background-color: #27ae60;
+          color: white;
+          border: none;
+        }
+
+        .primary-btn:hover {
+          background-color: #219653;
+        }
+
+        .primary-btn:disabled {
+          background-color: #95a5a6;
+          cursor: not-allowed;
+        }
+
+        .secondary-btn {
+          background-color: white;
+          color: #e74c3c;
+          border: 1px solid #e74c3c;
+        }
+
+        .secondary-btn:hover {
+          background-color: #fdf2f2;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+          .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          }
+
+          .admin-views-container {
+            margin-top: 80px;
+            padding: 0 15px;
+          }
+
+          .page-title {
+            font-size: 1.7rem;
+          }
+
+          .product-images {
+            height: 150px;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .products-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .product-actions {
+            flex-direction: column;
+          }
+
+          .pagination {
+            flex-direction: column;
+            gap: 12px;
+          }
+
+          .modal-actions {
+            flex-direction: column;
+          }
+        }
+      `}</style>
     </>
   );
 };

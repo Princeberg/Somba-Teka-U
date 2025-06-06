@@ -45,8 +45,8 @@ export default function Search() {
 
       <div className="container py-4">
         <div className="text-center mb-4">
-          <h1 className="fw-bold" style={{color:'black'}}>Produits Disponibles</h1>
-          <p className="text-muted">
+          <h1 className="fw-bold">Produits Disponibles</h1>
+          <p>
             N&apos;oubliez pas de cliquer sur l&apos;image pour plus d&apos;information
           </p>
         </div>
@@ -98,7 +98,7 @@ export default function Search() {
                   <p className="card-text text-secondary small">
                     {product.description?.substring(0, 60)}...
                   </p>
-                  <div className="fw-semibold text-danger">
+                  <div className="fw-semibold text-success">
                     {product.price ? `${product.price} FCFA` : 'Tarif indéterminé'}
                   </div>
                 </div>

@@ -7,9 +7,10 @@ import useAuth from '@/lib/Auth';
 
 export default function AddProductPage() {
   const router = useRouter();
-  const { user, loading } = useAuth(); // ✅ Correction ici
+  const { user, loading } = useAuth(); 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [previews, setPreviews] = useState({});
   const [uploadedUrls, setUploadedUrls] = useState({});
   const [formData, setFormData] = useState({
@@ -22,7 +23,12 @@ export default function AddProductPage() {
 
   const fileInputsRef = useRef([]);
 
-  if (loading) return <p>Chargement...</p>; // ✅ Affiche une attente
+  if (loading) return (
+    <div className="loading-overlay">
+      <div className="loading-spinner"></div>
+      <p>Chargement de votre session...</p>
+    </div>
+  );
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -64,15 +70,20 @@ export default function AddProductPage() {
     reader.readAsDataURL(file);
 
     try {
+      setIsSubmitting(true);
       const result = await uploadImageToCloudinary(file, index);
       setUploadedUrls((prev) => ({
         ...prev,
         [index]: result.url,
       }));
+      setSuccess(`Image ${index} téléchargée avec succès`);
+      setTimeout(() => setSuccess(null), 3000);
     } catch (uploadError) {
       console.error("Erreur d'upload Cloudinary :", uploadError);
       setError("Erreur lors de l'upload de l'image");
       e.target.value = '';
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -111,7 +122,7 @@ export default function AddProductPage() {
     if (Object.keys(uploadedUrls).length < 3) missingFields.push('Au moins 3 images');
 
     if (missingFields.length > 0) {
-      setError(`Champs requis manquants ou invalides : ${missingFields.join(', ')}`);
+      setError(`Champs requis manquants : ${missingFields.join(', ')}`);
       setIsSubmitting(false);
       return;
     }
@@ -147,13 +158,18 @@ export default function AddProductPage() {
         return;
       }
 
-      router.push('/boutique/confirm');
+      // Show success message before redirect
+      setSuccess('Produit ajouté avec succès! Redirection en cours...');
+      setTimeout(() => {
+        router.push('/boutique/confirm');
+      }, 2000);
     } catch (err) {
       setError(err.message || "Une erreur s'est produite lors de la soumission");
     } finally {
       setIsSubmitting(false);
     }
   };
+
   return (
     <>
       <Head>
@@ -164,12 +180,27 @@ export default function AddProductPage() {
 
       <Header/>
       
-      <div className="container" style={{marginTop:'95px'}}>
-        <div className="form-container">
-            <h3>Ajout d&apos;un Nouveau Produit</h3>
-            <p className="form-subtitle">Remplissez ce formulaire pour ajouter votre produit à notre plateforme</p>
+      <div className="form-page-container">
+        <div className="form-header">
+          <div className="form-header-content">
+            <h1 className="form-title">
+              <i className="fas fa-plus-circle"></i> Ajouter un Nouveau Produit
+            </h1>
+            <p className="form-subtitle">
+              Remplissez ce formulaire pour partager votre produit avec notre communauté
+            </p>
           </div>
-          
+        </div>
+        
+        <div className="form-progress">
+          <div className="progress-bar" style={{ width: `${Object.keys(uploadedUrls).length * 33.33}%` }}></div>
+          <div className="progress-text">
+            Étape {Math.min(2, Math.floor(Object.keys(uploadedUrls).length / 2)) + 1} sur 2 • 
+            {Object.keys(uploadedUrls).length}/3 images téléchargées
+          </div>
+        </div>
+
+        <div className="form-container">
           {error && (
             <div className="alert alert-danger" role="alert">
               <i className="fas fa-exclamation-circle me-2"></i>
@@ -177,12 +208,25 @@ export default function AddProductPage() {
             </div>
           )}
 
-          <form id="productForm" onSubmit={handleSubmit} className="p-4">
-            <div className="row g-4">
-              {/* Catégorie et Ville */}
-              <div className="col-md-6">
+          {success && (
+            <div className="alert alert-success" role="alert">
+              <i className="fas fa-check-circle me-2"></i>
+              {success}
+            </div>
+          )}
+
+          <form id="productForm" onSubmit={handleSubmit} className="product-form">
+            <div className="form-section">
+              <h2 className="section-title">
+                <i className="fas fa-info-circle"></i> Informations de base
+              </h2>
+              
+              <div className="form-grid">
+                {/* Catégorie */}
                 <div className="form-group">
-                  <label htmlFor="categorie" className="required-field">Catégorie du produit</label>
+                  <label htmlFor="categorie" className="required-field">
+                    <i className="fas fa-tag"></i> Catégorie
+                  </label>
                   <select 
                     id="categorie" 
                     name="categorie" 
@@ -205,11 +249,12 @@ export default function AddProductPage() {
                     <option value="Autre">Autre</option>
                   </select>
                 </div>
-              </div>
 
-              <div className="col-md-6">
+                {/* Ville */}
                 <div className="form-group">
-                  <label htmlFor="ville" className="required-field">Ville</label>
+                  <label htmlFor="ville" className="required-field">
+                    <i className="fas fa-map-marker-alt"></i> Ville
+                  </label>
                   <select 
                     id="ville" 
                     name="ville" 
@@ -230,12 +275,12 @@ export default function AddProductPage() {
                     <option value="Autre">Autre</option>
                   </select>
                 </div>
-              </div>
 
-              {/* Nom du produit */}
-              <div className="col-md-6">
+                {/* Nom du produit */}
                 <div className="form-group">
-                  <label htmlFor="productName" className="required-field">Nom du Produit</label>
+                  <label htmlFor="productName" className="required-field">
+                    <i className="fas fa-cube"></i> Nom du Produit
+                  </label>
                   <input 
                     type="text" 
                     id="productName" 
@@ -247,12 +292,12 @@ export default function AddProductPage() {
                     onChange={handleInputChange}
                   />
                 </div>
-              </div>
 
-              {/* Prix */}
-              <div className="col-md-6">
+                {/* Prix */}
                 <div className="form-group">
-                  <label htmlFor="price" className="required-field">Prix du produit (FCFA)</label>
+                  <label htmlFor="price" className="required-field">
+                    <i className="fas fa-money-bill-wave"></i> Prix (FCFA)
+                  </label>
                   <div className="input-group">
                     <span className="input-group-text">FCFA</span>
                     <input 
@@ -268,213 +313,339 @@ export default function AddProductPage() {
                   </div>
                 </div>
               </div>
+            </div>
 
-              {/* Description du produit */}
-              <div className="col-12">
-                <div className="form-group">
-                  <label htmlFor="description" className="required-field">Description du produit</label>
-                  <textarea 
-                    id="description" 
-                    name="description"
-                    className="form-control" 
-                    rows="5" 
-                    required
-                    placeholder="Décrivez votre produit en détail..."
-                    value={formData.description}
-                    onChange={handleInputChange}
-                  />
+            <div className="form-section">
+              <h2 className="section-title">
+                <i className="fas fa-align-left"></i> Description
+              </h2>
+              <div className="form-group">
+                <label htmlFor="description" className="required-field">
+                  Décrivez votre produit en détail
+                </label>
+                <textarea 
+                  id="description" 
+                  name="description"
+                  className="form-control" 
+                  rows="5" 
+                  required
+                  placeholder="Incluez les caractéristiques, l'état, les spécifications techniques, etc."
+                  value={formData.description}
+                  onChange={handleInputChange}
+                />
+                <div className="char-count">
+                  {formData.description.length}/500 caractères
                 </div>
               </div>
+            </div>
 
-              {/* Images upload */}
-              {[1, 2, 3].map((index) => (
-                <div className="col-md-4" key={index}>
-                  <div className="form-group">
-                    <label className="required-field block font-semibold mb-2">
+            <div className="form-section">
+              <h2 className="section-title">
+                <i className="fas fa-images"></i> Images du produit
+              </h2>
+              <p className="section-subtitle">
+                Ajoutez au moins 3 photos de haute qualité (max 5MB chacune)
+              </p>
+              
+              <div className="image-upload-grid">
+                {[1, 2, 3].map((index) => (
+                  <div className="image-upload-card" key={index}>
+                    <div className="upload-label">
                       {index === 1 ? 'Image principale' : `Image ${index}`}
-                    </label>
-
-                    <div className="file-input-container">
-                      <label htmlFor={`productPicture${index}`} className="file-input-label">
-                        <div className="upload-icon">
-                          <i className="fas fa-cloud-upload-alt text-2xl mb-2"></i>
-                        </div>
-                        <div className="upload-text">
-                          <span className="text-sm font-medium">
-                            {index === 1 ? "Image principale" : `Image ${index}`}
-                          </span>
-                          <small className="form-text">
-                            JPG/PNG, max 5MB
-                          </small>
-                        </div>
-                      </label>
-
-                      <input
-                        type="file"
-                        id={`productPicture${index}`}
-                        name={`productPicture${index}`}
-                        className="hidden"
-                        accept="image/*"
-                        required={index === 1}
-                        onChange={(e) => handleImageChange(e, index)}
-                        ref={(el) => (fileInputsRef.current[index] = el)}
-                      />
+                      {index === 1 && <span className="required-badge">Requis</span>}
                     </div>
-
-                    {previews[index] && (
-                      <div className="file-preview mt-3">
-                        <div className="preview-item">
-                          <img
-                            src={previews[index].url}
-                            alt={`Preview ${index}`}
-                            className="preview-image"
-                          />
-                          <button
-                            type="button"
-                            className="remove-btn"
-                            onClick={() => removeImage(index)}
-                            aria-label="Supprimer l'image"
-                          >
-                            <i className="fas fa-times"></i>
-                          </button>
-                        </div>
+                    
+                    {previews[index] ? (
+                      <div className="image-preview-container">
+                        <img
+                          src={previews[index].url}
+                          alt={`Preview ${index}`}
+                          className="image-preview"
+                        />
+                        <button
+                          type="button"
+                          className="remove-image-btn"
+                          onClick={() => removeImage(index)}
+                          aria-label="Supprimer l'image"
+                        >
+                          <i className="fas fa-trash"></i>
+                        </button>
+                        <div className="image-name">{previews[index].name}</div>
+                      </div>
+                    ) : (
+                      <div className="upload-area">
+                        <input
+                          type="file"
+                          id={`productPicture${index}`}
+                          name={`productPicture${index}`}
+                          className="hidden"
+                          accept="image/*"
+                          required={index === 1}
+                          onChange={(e) => handleImageChange(e, index)}
+                          ref={(el) => (fileInputsRef.current[index] = el)}
+                        />
+                        <label htmlFor={`productPicture${index}`} className="upload-label-button">
+                          <div className="upload-icon">
+                            <i className="fas fa-cloud-upload-alt"></i>
+                          </div>
+                          <div className="upload-text">Cliquez pour télécharger</div>
+                          <div className="upload-hint">JPG/PNG, max 5MB</div>
+                        </label>
                       </div>
                     )}
                   </div>
-                </div>
-              ))}
-
-              {/* Conditions */}
-              <div className="col-12">
-                <div className="form-check">
-                  <input 
-                    type="checkbox" 
-                    className="form-check-input" 
-                    id="termsCheck" 
-                    required 
-                  />
-                  <label className="form-check-label" htmlFor="termsCheck">
-                    J&apos;accepte les <a href="./terms" className="terms-link">conditions d&apos;utilisation</a>
-                  </label>
-                </div>
+                ))}
               </div>
+            </div>
 
-              {/* Submit button */}
-              <div className="col-12 text-center mt-4">
-                <button 
-                  type="submit" 
-                  className="btn btn-submit" 
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className="spinner"></span> 
-                      <span className="btn-text">Envoi en cours...</span>
-                    </>
-                  ) : (
-                    <>
-                      <i className="fas fa-paper-plane me-2"></i> 
-                      <span className="btn-text">Envoyer le produit </span>
-                    </>
-                  )}
-                </button>
+            <div className="form-section">
+              <div className="form-check">
+                <input 
+                  type="checkbox" 
+                  className="form-check-input" 
+                  id="termsCheck" 
+                  required 
+                />
+                <label className="form-check-label" htmlFor="termsCheck">
+                  J'accepte les <a href="./terms" className="terms-link">conditions d'utilisation</a> 
+                </label>
               </div>
+            </div>
+
+            <div className="form-actions">
+              <button 
+                type="submit" 
+                className="submit-button" 
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <span className="spinner"></span> 
+                    <span className="btn-text">Publication en cours...</span>
+                  </>
+                ) : (
+                  <>
+                    <i className="fas fa-paper-plane me-2"></i> 
+                    <span className="btn-text">Publier le produit</span>
+                  </>
+                )}
+              </button>
+              
+              <button 
+                type="button" 
+                className="cancel-button"
+                onClick={() => router.back()}
+              >
+                <i className="fas fa-times"></i> Annuler
+              </button>
             </div>
           </form>
         </div>
+      </div>
 
       <style jsx global>{`
         :root {
-          --secondary-color: #2c3e50;
-          --accent-color: #4CAF50;
-          --light-color: #f8f9fa;
-          --dark-color: #343a40;
-          --border-radius: 10px;
-          --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+          --primary-color: #2c3e50;
+          --secondary-color: #34495e;
+          --accent-color: #27ae60;
+          --light-accent: #2ecc71;
+          --danger-color: #e74c3c;
+          --light-gray: #ecf0f1;
+          --medium-gray: #bdc3c7;
+          --dark-gray: #7f8c8d;
+          --border-radius: 8px;
+          --box-shadow: 0 4px 12px rgba(0,0,0,0.1);
           --transition: all 0.3s ease;
-          --input-focus: 0 0 0 3px rgba(76, 175, 80, 0.2);
-        }
-        
-        body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-          background-color: #f5f7fa;
-          color: #333;
-          line-height: 1.6;
         }
 
-        .container {
-       
-          max-width: 950px;
-          margin: 40px auto;
-          padding: 0 20px;
-           align-items: center;
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+
+        .loading-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(255,255,255,0.9);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+        }
+
+        .loading-spinner {
+          width: 50px;
+          height: 50px;
+          border: 5px solid var(--light-gray);
+          border-top-color: var(--accent-color);
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+          margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        .form-page-container {
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 20px;
+        }
+
+        .form-header {
+          background: linear-gradient(135deg, var(--accent-color), var(--light-accent));
+          color: white;
+          padding: 30px;
+          border-radius: var(--border-radius);
+          margin-bottom: 30px;
+          box-shadow: var(--box-shadow);
+        }
+
+        .form-header-content {
+          max-width: 800px;
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .form-title {
+          font-size: 2.2rem;
+          margin-bottom: 10px;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .form-title i {
+          margin-right: 15px;
+        }
+
+        .form-subtitle {
+          font-size: 1.1rem;
+          opacity: 0.9;
+        }
+
+        .form-progress {
+          background-color: white;
+          border-radius: var(--border-radius);
+          padding: 15px 20px;
+          margin-bottom: 30px;
+          box-shadow: var(--box-shadow);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .progress-bar {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 4px;
+          background-color: var(--accent-color);
+          transition: var(--transition);
+        }
+
+        .progress-text {
+          font-size: 0.9rem;
+          color: var(--secondary-color);
+          font-weight: 500;
         }
 
         .form-container {
-          width: 100%;
           background-color: white;
           border-radius: var(--border-radius);
           box-shadow: var(--box-shadow);
           overflow: hidden;
           margin-bottom: 40px;
-           align-items: center;
         }
 
-        .form-header {
-          padding: 25px 30px;
-          border-bottom: 1px solid #eee;
-          background-color: #f9f9f9;
+        .product-form {
+          padding: 30px;
         }
 
-        .form-subtitle {
-          color: #666;
-          font-size: 0.95rem;
-          margin-top: 8px;
-          text-align: center;
+        .form-section {
+          margin-bottom: 40px;
+          padding-bottom: 30px;
+          border-bottom: 1px solid var(--light-gray);
         }
 
-        h3 {
-          font-family: 'Cardo', serif;
+        .form-section:last-child {
+          border-bottom: none;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+
+        .section-title {
+          font-size: 1.4rem;
+          margin-bottom: 20px;
           color: var(--secondary-color);
-          margin: 0;
-          font-weight: 400;
-          text-align: center;
-          font-size: 1.8rem;
-          position: relative;
+          display: flex;
+          align-items: center;
+        }
+
+        .section-title i {
+          margin-right: 10px;
+          color: var(--accent-color);
+        }
+
+        .section-subtitle {
+          color: var(--dark-gray);
+          margin-bottom: 20px;
+          font-size: 0.95rem;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          gap: 20px;
+          margin-bottom: 20px;
         }
 
         .form-group {
-          margin-bottom: 1.5rem;
-          max-width: 550px;
+          margin-bottom: 20px;
         }
 
         label {
-          font-weight: 400;
-          margin-bottom: 0.5rem;
+          font-weight: 500;
+          margin-bottom: 8px;
           display: block;
           color: var(--secondary-color);
-          font-size: 0.9rem;
+          font-size: 0.95rem;
+          display: flex;
+          align-items: center;
+        }
+
+        label i {
+          margin-right: 8px;
+          width: 20px;
+          text-align: center;
         }
 
         .form-control {
-          height: 48px;
-          border: 1px solid #ddd;
+          height: 50px;
+          border: 1px solid var(--medium-gray);
           border-radius: var(--border-radius);
           transition: var(--transition);
           padding: 12px 15px;
-          font-size: 0.95rem;
+          font-size: 1rem;
           width: 100%;
+          background-color: white;
         }
 
         .form-control:focus {
           border-color: var(--accent-color);
-          box-shadow: var(--input-focus);
+          box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.2);
           outline: none;
         }
 
         textarea.form-control {
           height: auto;
-          min-height: 140px;
+          min-height: 150px;
           resize: vertical;
         }
 
@@ -486,152 +657,11 @@ export default function AddProductPage() {
           background-size: 12px;
         }
 
-        .btn-submit {
-          background-color: white;
-          border: 2px solid var(--accent-color);
-          color: var(--accent-color);
-          padding: 14px 30px;
-          font-size: 1rem;
-          font-weight: 600;
-          border-radius: var(--border-radius);
-          transition: var(--transition);
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          cursor: pointer;
-          width: auto;
-          min-width: 220px;
-        }
-
-        .btn-submit:hover:not(:disabled) {
-          background-color: var(--accent-color);
-          color: white;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-        }
-
-        .btn-submit:disabled {
-          opacity: 0.7;
-          cursor: not-allowed;
-        }
-
-        .btn-text {
-          margin-left: 8px;
-        }
-
-        .file-input-container {
-          position: relative;
-          width: 100%;
-        }
-
-        .file-input-label {
-          border: 2px dashed #ddd;
-          border-radius: var(--border-radius);
-          padding: 25px 15px;
-          text-align: center;
-          cursor: pointer;
-          transition: var(--transition);
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          background-color: #f9f9f9;
-          height: 120px;
-        }
-
-        .file-input-label:hover {
-          border-color: var(--accent-color);
-          background-color: rgba(76, 175, 80, 0.05);
-        }
-
-        .upload-icon {
-          color: var(--accent-color);
-          margin-bottom: 8px;
-          font-size: 1.5rem;
-        }
-
-        .upload-text {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .file-input-label span {
-          font-size: 0.9rem;
-          color: var(--secondary-color);
-          font-weight: 500;
-        }
-
-        .file-input-label small {
+        .char-count {
+          text-align: right;
           font-size: 0.8rem;
-          color: #777;
-          margin-top: 4px;
-        }
-
-        .file-preview {
-          margin-top: 10px;
-        }
-
-        .preview-item {
-          position: relative;
-          width: 100%;
-          height: 120px;
-          border-radius: var(--border-radius);
-          overflow: hidden;
-          border: 1px solid #eee;
-        }
-
-        .preview-image {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .remove-btn {
-          position: absolute;
-          top: 8px;
-          right: 8px;
-          background: rgba(0,0,0,0.7);
-          color: white;
-          border: none;
-          width: 28px;
-          height: 28px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 12px;
-          cursor: pointer;
-          transition: var(--transition);
-        }
-
-        .remove-btn:hover {
-          background: rgba(220, 53, 69, 0.9);
-        }
-
-        .required-field::after {
-          content: " *";
-          color: var(--accent-color);
-        }
-
-        .form-text {
-          font-size: 0.8rem;
-          color: #6c757d;
-          margin-top: 6px;
-          display: block;
-        }
-
-        .alert-danger {
-          color: #721c24;
-          background-color: #f8d7da;
-          border: 1px solid #f5c6cb;
-          padding: 12px 15px;
-          border-radius: var(--border-radius);
-          margin: 0 30px 20px;
-          display: flex;
-          align-items: center;
-          font-size: 0.9rem;
+          color: var(--dark-gray);
+          margin-top: 5px;
         }
 
         .input-group {
@@ -641,11 +671,11 @@ export default function AddProductPage() {
         }
 
         .input-group-text {
-          background-color: #f1f1f1;
-          border: 1px solid #ddd;
+          background-color: var(--light-gray);
+          border: 1px solid var(--medium-gray);
           padding: 0 15px;
-          font-size: 0.9rem;
-          color: #555;
+          font-size: 0.95rem;
+          color: var(--secondary-color);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -656,6 +686,140 @@ export default function AddProductPage() {
         .input-group .form-control {
           border-radius: 0 var(--border-radius) var(--border-radius) 0;
           border-left: none;
+        }
+
+        .image-upload-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 20px;
+        }
+
+        .image-upload-card {
+          border: 1px dashed var(--medium-gray);
+          border-radius: var(--border-radius);
+          padding: 15px;
+          transition: var(--transition);
+        }
+
+        .image-upload-card:hover {
+          border-color: var(--accent-color);
+        }
+
+        .upload-label {
+          font-weight: 500;
+          margin-bottom: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .required-badge {
+          background-color: var(--accent-color);
+          color: white;
+          padding: 3px 8px;
+          border-radius: 12px;
+          font-size: 0.7rem;
+          font-weight: 600;
+        }
+
+        .upload-area {
+          position: relative;
+          height: 180px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          background-color: var(--light-gray);
+          border-radius: var(--border-radius);
+          transition: var(--transition);
+        }
+
+        .upload-area:hover {
+          background-color: #e0e0e0;
+        }
+
+        .upload-label-button {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          width: 100%;
+          height: 100%;
+          justify-content: center;
+        }
+
+        .upload-icon {
+          font-size: 2rem;
+          color: var(--accent-color);
+          margin-bottom: 10px;
+        }
+
+        .upload-text {
+          font-weight: 500;
+          margin-bottom: 5px;
+        }
+
+        .upload-hint {
+          font-size: 0.8rem;
+          color: var(--dark-gray);
+        }
+
+        .hidden {
+          position: absolute;
+          opacity: 0;
+          width: 0;
+          height: 0;
+        }
+
+        .image-preview-container {
+          position: relative;
+          height: 180px;
+          border-radius: var(--border-radius);
+          overflow: hidden;
+          border: 1px solid var(--light-gray);
+        }
+
+        .image-preview {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .remove-image-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          background-color: rgba(231, 76, 60, 0.9);
+          color: white;
+          border: none;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: var(--transition);
+        }
+
+        .remove-image-btn:hover {
+          background-color: var(--danger-color);
+          transform: scale(1.1);
+        }
+
+        .image-name {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          background: rgba(0,0,0,0.7);
+          color: white;
+          padding: 5px 10px;
+          font-size: 0.8rem;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .form-check {
@@ -669,21 +833,83 @@ export default function AddProductPage() {
           width: 18px;
           height: 18px;
           cursor: pointer;
+          accent-color: var(--accent-color);
         }
 
         .form-check-label {
-          font-size: 0.9rem;
-          color: #555;
+          font-size: 0.95rem;
+          color: var(--secondary-color);
         }
 
         .terms-link {
           color: var(--accent-color);
           text-decoration: none;
           font-weight: 500;
+          transition: var(--transition);
         }
 
         .terms-link:hover {
           text-decoration: underline;
+          color: var(--light-accent);
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 15px;
+          margin-top: 30px;
+          flex-wrap: wrap;
+        }
+
+        .submit-button {
+          background-color: var(--accent-color);
+          color: white;
+          border: none;
+          padding: 14px 30px;
+          font-size: 1rem;
+          font-weight: 600;
+          border-radius: var(--border-radius);
+          transition: var(--transition);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);
+        }
+
+        .submit-button:hover:not(:disabled) {
+          background-color: var(--light-accent);
+          transform: translateY(-2px);
+          box-shadow: 0 6px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        .submit-button:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .cancel-button {
+          background-color: white;
+          color: var(--danger-color);
+          border: 1px solid var(--danger-color);
+          padding: 14px 25px;
+          font-size: 1rem;
+          font-weight: 600;
+          border-radius: var(--border-radius);
+          transition: var(--transition);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+        }
+
+        .cancel-button:hover {
+          background-color: var(--danger-color);
+          color: white;
+        }
+
+        .btn-text {
+          margin-left: 8px;
         }
 
         .spinner {
@@ -692,62 +918,92 @@ export default function AddProductPage() {
           height: 18px;
           border: 2px solid rgba(255,255,255,.3);
           border-radius: 50%;
-          border-top-color: #fff;
+          border-top-color: white;
           animation: spin 1s ease-in-out infinite;
+          margin-right: 8px;
         }
 
-        @keyframes spin {
-          to { transform: rotate(360deg); }
+        .alert {
+          padding: 15px;
+          border-radius: var(--border-radius);
+          margin-bottom: 25px;
+          display: flex;
+          align-items: center;
+          font-size: 0.95rem;
         }
 
+        .alert-danger {
+          color: #721c24;
+          background-color: #f8d7da;
+          border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+          color: #155724;
+          background-color: #d4edda;
+          border: 1px solid #c3e6cb;
+        }
+
+        .alert i {
+          margin-right: 10px;
+          font-size: 1.2rem;
+        }
+
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-          .container {
-            margin: 30px auto;
-            padding: 0 15px;
+          .form-page-container {
+            padding: 15px;
           }
           
           .form-header {
             padding: 20px;
           }
           
-          h3 {
-            font-size: 1.5rem;
+          .form-title {
+            font-size: 1.8rem;
           }
           
-          .form-group {
-            margin-bottom: 1.2rem;
+          .product-form {
+            padding: 20px;
           }
           
-          .btn-submit {
+          .form-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .image-upload-grid {
+            grid-template-columns: 1fr;
+          }
+          
+          .form-actions {
+            flex-direction: column;
+            gap: 10px;
+          }
+          
+          .submit-button, .cancel-button {
             width: 100%;
           }
         }
 
-        @media (max-width: 576px) {
-          .container {
-            margin: 20px auto;
-          }
-          
-          .form-container {
-            padding: 0;
-          }
-          
+        @media (max-width: 480px) {
           .form-header {
             padding: 15px;
           }
           
-          .form-control {
-            height: 44px;
-            padding: 10px 12px;
+          .form-title {
+            font-size: 1.5rem;
           }
           
-          textarea.form-control {
-            min-height: 120px;
+          .form-subtitle {
+            font-size: 0.95rem;
           }
           
-          .file-input-label {
-            padding: 20px 10px;
-            height: 100px;
+          .product-form {
+            padding: 15px;
+          }
+          
+          .section-title {
+            font-size: 1.2rem;
           }
         }
       `}</style>

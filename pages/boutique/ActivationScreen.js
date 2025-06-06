@@ -243,7 +243,7 @@ export default function ActivationScreen() {
           <input
             type="text"
             id="phoneNumber"
-            placeholder="Entrez le numéro de téléphone de la transaction"
+            placeholder="Numéro de téléphone de la transaction"
             value={phoneNumber}
             onChange={(e) => setPhoneNumber(e.target.value)}
             style={{
