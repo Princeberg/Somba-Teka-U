@@ -94,40 +94,53 @@ export default function About() {
               <p className="lead mb-5">Une équipe passionnée combinant expertise technologique et connaissance locale.</p>
             </div>
           </div>
-          <div className="row">
-            {[
-              {
-                name: "Prince Moussaki",
-                role: "Fondateur & CEO de Magic & Tech",
-                desc: "Ingénieur en technologie de l'information et Graphic Designer",
-              },
-              {
-                name: "Sarah Nkounkou",
-                role: "Responsable Marketing",
-                desc: "Spécialiste en stratégie digitale et développement de marque.",
-              },
-              {
-                name: "David Mboungou",
-                role: "Responsable Technique",
-                desc: "Ingénieur logiciel avec expertise en plateformes digitales.",
-              }
-            ].map((member, i) => (
-              <div key={i} className="col-md-4 mb-4">
-                <div className="about-card text-center">
-                  <img
-                    src="/images/profile-1.jpg"
-                    alt={`Membre ${member.name}`}
-                    width={120}
-                    height={120}
-                    className="rounded-circle mb-3"
-                  />
-                  <h4>{member.name} </h4>
-                  <p style={{color: '#4CAF50'}}>{member.role}</p>
-                  <p>{member.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+         <div className="row">
+  <div className="col-md-4 mb-4">
+    <div className="about-card text-center">
+      <img
+        src="/images/prince.jpg" 
+        width= {240}
+        height=  {200}
+        className="rounded-circle mb-3"
+        alt="Prince Moussaki's profile"
+      />
+      <h4>Prince Moussaki</h4>
+      <p style={{ color: '#4CAF50' }}>Fondateur & CEO de Magic & Tech</p>
+      <p>Ingénieur en technologie de l'information et Graphic Designer</p>
+    </div>
+  </div>
+
+  <div className="col-md-4 mb-4">
+    <div className="about-card text-center">
+      <img
+        src="/images/profile.jpg" 
+       width= {240}
+        height=  {200}
+        className="rounded-circle mb-3"
+        alt="Sarah Nkounkou's profile"
+      />
+      <h4>Sarah Nkounkou</h4>
+      <p style={{ color: '#4CAF50' }}>Responsable Marketing</p>
+      <p>Spécialiste en stratégie digitale et développement de marque.</p>
+    </div>
+  </div>
+
+  <div className="col-md-4 mb-4">
+    <div className="about-card text-center">
+      <img
+        src="/images/profile.jpg" 
+        width= {240}
+        height=  {200}
+        className="rounded-circle mb-3"
+        alt="David Mboungou's profile"
+      />
+      <h4>David Mboungou</h4>
+      <p style={{ color: '#4CAF50' }}>Responsable Technique</p>
+      <p>Ingénieur logiciel avec expertise en plateformes digitales.</p>
+    </div>
+  </div>
+</div>
+
         </div>
       </section>
 
