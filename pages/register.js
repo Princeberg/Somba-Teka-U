@@ -73,7 +73,7 @@ export default function RegisterSeller() {
         .insert([{
           id_user: userId,
           email,
-          WhatsappURL: `https://wa.me/${WhatsApp.replace(/\s+/g, '')}`,
+          WhatsappURL: `https://wa.me/${WhatsApp}`,
           sellerName,
           BirthDate,
           sellerContact: SellerPhone,
@@ -114,59 +114,60 @@ export default function RegisterSeller() {
 
       <div className="card shadow-sm p-4">
         <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-md-6 mb-3">
-              <label htmlFor="sellerName" className="form-label">Nom du vendeur</label>
-              <input type="text" id="sellerName" className="form-control" value={formData.sellerName} onChange={handleChange} required />
-            </div>
+  <div className="row">
+    <div className="col-md-6 mb-3">
+      <label htmlFor="sellerName" className="form-label">Nom du vendeur</label>
+      <input type="text" id="sellerName" className="form-control" value={formData.sellerName} onChange={handleChange} placeholder='Entrez le nom du vendeur' required />
+    </div>
 
-            <div className="col-md-6 mb-3">
-              <label htmlFor="SellerPhone" className="form-label">Téléphone</label>
-              <div className="input-group">
-                <span className="input-group-text"><i className="fas fa-phone"></i></span>
-                <input type="tel" id="SellerPhone" className="form-control" value={formData.SellerPhone} onChange={handleChange} required />
-              </div>
-            </div>
+    <div className="col-md-6 mb-3">
+      <label htmlFor="SellerPhone" className="form-label">Téléphone</label>
+      <div className="input-group">
+        <span className="input-group-text"><i className="fas fa-phone"></i></span>
+        <input type="tel" id="SellerPhone" className="form-control" value={formData.SellerPhone} onChange={handleChange} placeholder='Entrez votre numéro de téléphone' required />
+      </div>
+    </div>
 
-            <div className="col-md-6 mb-3">
-              <label htmlFor="WhatsApp" className="form-label">Contact WhatsApp</label>
-              <div className="input-group">
-                <span className="input-group-text"><i className="fab fa-whatsapp"></i></span>
-                <input type="tel" id="WhatsApp" className="form-control" value={formData.WhatsApp} onChange={handleChange} required />
-              </div>
-            </div>
+    <div className="col-md-6 mb-3">
+      <label htmlFor="WhatsApp" className="form-label">Contact WhatsApp</label>
+      <div className="input-group">
+        <span className="input-group-text"><i className="fab fa-whatsapp"></i></span>
+        <input type="tel" id="WhatsApp" className="form-control" value={formData.WhatsApp} onChange={handleChange} placeholder='Numéro WhatsApp (ex: +33612345678)' required />
+      </div>
+    </div>
 
-            <div className="col-md-6 mb-3">
-              <label htmlFor="email" className="form-label">Email</label>
-              <input type="email" id="email" className="form-control" value={formData.email} onChange={handleChange} required />
-            </div>
+    <div className="col-md-6 mb-3">
+      <label htmlFor="email" className="form-label">Email</label>
+      <input type="email" id="email" className="form-control" value={formData.email} onChange={handleChange} placeholder='Votre adresse e-mail' required />
+    </div>
 
-            <div className="col-md-6 mb-3">
-              <label htmlFor="BirthDate" className="form-label">Date de naissance</label>
-              <input type="date" id="BirthDate" className="form-control" value={formData.BirthDate} onChange={handleChange} required />
-            </div>
+    <div className="col-md-6 mb-3">
+      <label htmlFor="BirthDate" className="form-label">Date de naissance</label>
+      <input type="date" id="BirthDate" className="form-control" value={formData.BirthDate} onChange={handleChange} required placeholder='Sélectionnez votre date de naissance' />
+    </div>
 
-            <div className="col-md-6 mb-3">
-              <label htmlFor="password" className="form-label">Mot de passe</label>
-              <input type="password" id="password" className="form-control" value={formData.password} onChange={handleChange} required minLength={6} />
-            </div>
+    <div className="col-md-6 mb-3">
+      <label htmlFor="password" className="form-label">Mot de passe</label>
+      <input type="password" id="password" className="form-control" value={formData.password} onChange={handleChange} required minLength={6} placeholder='Au moins 6 caractères' />
+    </div>
 
-            <div className="col-md-6 mb-3">
-              <label htmlFor="confirmPassword" className="form-label">Confirmer le mot de passe</label>
-              <input type="password" id="confirmPassword" className="form-control" value={formData.confirmPassword} onChange={handleChange} required minLength={6} />
-              {errors.confirmPassword && <small className="text-danger">{errors.confirmPassword}</small>}
-            </div>
-          </div>
+    <div className="col-md-6 mb-3">
+      <label htmlFor="confirmPassword" className="form-label">Confirmer le mot de passe</label>
+      <input type="password" id="confirmPassword" className="form-control" value={formData.confirmPassword} onChange={handleChange} required minLength={6} placeholder='Répétez le mot de passe' />
+      {errors.confirmPassword && <small className="text-danger">{errors.confirmPassword}</small>}
+    </div>
+  </div>
 
-          <button type="submit" className="btn btn-danger w-70" disabled={isSubmitting}>
-            {isSubmitting ? 'Traitement...' : 'Créer maintenant'}
-          </button>
+  <button type="submit" className="btn btn-danger w-70" disabled={isSubmitting}>
+    {isSubmitting ? 'Traitement...' : 'Créer maintenant'}
+  </button>
 
-          <div className="text-center mt-3">
-            <span>Déjà un compte ? </span>
-            <Link href="/login" className="text-decoration-underline">Se connecter</Link>
-          </div>
-        </form>
+  <div className="text-center mt-3">
+    <span>Déjà un compte ? </span>
+    <Link href="/login" className="text-decoration-underline">Se connecter</Link>
+  </div>
+</form>
+
       </div>
 
       {modalType && (
