@@ -144,7 +144,6 @@ export default function UpdatePassword() {
           justify-content: center;
           align-items: center;
           padding: 1rem;
-          background: #f9f9f9;
         }
         .form-wrapper {
           background: white;

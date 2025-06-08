@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import Header from "@/components/Header2";
 import { useEffect } from 'react';
 import AOS from 'aos';
@@ -94,52 +95,43 @@ export default function About() {
               <p className="lead mb-5">Une équipe passionnée combinant expertise technologique et connaissance locale.</p>
             </div>
           </div>
-         <div className="row">
-  <div className="col-md-4 mb-4">
-    <div className="about-card text-center">
-      <img
-        src="/images/prince.jpg" 
-        width= {240}
-        height=  {200}
-        className="rounded-circle mb-3"
-        alt="Prince Moussaki's profile"
-      />
-      <h4>Prince Moussaki</h4>
-      <p style={{ color: '#4CAF50' }}>Fondateur & CEO de Magic & Tech</p>
-      <p>Ingénieur en technologie de l'information et Graphic Designer</p>
-    </div>
-  </div>
+        <div className="row">
+      {/* Card 1 */}
+      <div className="col-md-4 mb-4">
+        <div className="about-card text-center">
+          <div className="position-relative mx-auto mb-3" style={{ width: '100%', maxWidth: 240, aspectRatio: '6 / 5', position: 'relative' }}>
+            <Image
+              src="/images/prince.jpg"
+              alt="Prince Moussaki's profile"
+              fill
+              className="rounded-circle object-fit-cover"
+              sizes="(max-width: 768px) 100vw, 240px"
+            />
+          </div>
+          <h4>Prince Moussaki</h4>
+          <p style={{ color: '#4CAF50' }}>Fondateur & CEO de Magic & Tech</p>
+          <p>Ingénieur en technologie de l'information et Graphic Designer</p>
+        </div>
+      </div>
 
-  <div className="col-md-4 mb-4">
-    <div className="about-card text-center">
-      <img
-        src="/images/thercy.jpg" 
-       width= {240}
-        height=  {200}
-        className="rounded-circle mb-3"
-        alt="Sarah Nkounkou's profile"
-      />
-      <h4> Thercy Nold Batantou </h4>
-      <p style={{ color: '#4CAF50' }}>Responsable Marketing et Communication </p>
-      <p>Spécialiste en stratégie digitale et développement de marque.</p>
+      {/* Card 2 */}
+      <div className="col-md-4 mb-4">
+        <div className="about-card text-center">
+          <div className="position-relative mx-auto mb-3" style={{ width: '100%', maxWidth: 240, aspectRatio: '6 / 5', position: 'relative' }}>
+            <Image
+              src="/images/thercy.jpg"
+              alt="Thercy Nold Batantou's profile"
+              fill
+              className="rounded-circle object-fit-cover"
+              sizes="(max-width: 768px) 100vw, 240px"
+            />
+          </div>
+          <h4>Thercy Nold Batantou</h4>
+          <p style={{ color: '#4CAF50' }}>Responsable Marketing et Communication</p>
+          <p>Spécialiste en stratégie digitale et développement de marque.</p>
+        </div>
+      </div>
     </div>
-  </div>
-
-  {/* <div className="col-md-4 mb-4">
-    <div className="about-card text-center">
-      <img
-        src="/images/profile.jpg" 
-        width= {240}
-        height=  {200}
-        className="rounded-circle mb-3"
-        alt="David Mboungou's profile"
-      />
-      <h4>David Mboungou</h4>
-      <p style={{ color: '#4CAF50' }}>Responsable Technique</p>
-      <p>Ingénieur logiciel avec expertise en plateformes digitales.</p>
-    </div>
-  </div> */}
-</div>
 
         </div>
       </section>
