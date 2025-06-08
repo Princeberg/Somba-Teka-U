@@ -8,9 +8,7 @@ export default function Footer() {
             <p>Plateforme de commerce local au Congo-Brazzaville.</p>
             <div className="social-links">
               <a href="#" aria-label="Facebook"><i className="fab fa-facebook-f"></i></a>
-              <a href="#" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
-              <a href="#" aria-label="Twitter"><i className="fab fa-twitter"></i></a>
-              <a href="#" aria-label="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
+              <a href="https://www.instagram.com/sombateka_officiel?igsh=YXVraTNiM3VvZ2tq" aria-label="Instagram"><i className="fab fa-instagram"></i></a>
             </div>
           </div>
         </div>
