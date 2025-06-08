@@ -99,7 +99,7 @@ export default function About() {
       {/* Card 1 */}
       <div className="col-md-4 mb-4">
         <div className="about-card text-center">
-          <div className="position-relative mx-auto mb-3" style={{ width: '100%', maxWidth: 240, aspectRatio: '6 / 5', position: 'relative' }}>
+          <div className="position-relative mx-auto mb-3" style={{ width: '50%', aspectRatio: '5 / 5', position: 'relative' }}>
             <Image
               src="/images/prince.jpg"
               alt="Prince Moussaki's profile"
@@ -117,7 +117,7 @@ export default function About() {
       {/* Card 2 */}
       <div className="col-md-4 mb-4">
         <div className="about-card text-center">
-          <div className="position-relative mx-auto mb-3" style={{ width: '100%', maxWidth: 240, aspectRatio: '6 / 5', position: 'relative' }}>
+          <div className="position-relative mx-auto mb-3" style={{ width: '50%', aspectRatio: '5 / 5', position: 'relative'  }}>
             <Image
               src="/images/thercy.jpg"
               alt="Thercy Nold Batantou's profile"
