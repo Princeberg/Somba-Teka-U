@@ -16,7 +16,7 @@ export default function About() {
   return (
     <>
       <Head>
-        <title>À Propos - Somba-Teka | Plateforme e-commerce Congo-Brazzaville</title>
+        <title>À Propos - Somba-Teka </title>
         <meta name="description" content="Plateforme professionnelle de mise en relation entre vendeurs et acheteurs au Congo-Brazzaville. Découvrez notre mission et notre équipe." />
         <meta name="keywords" content="e-commerce Congo, plateforme vente en ligne, marketplace Brazzaville, acheteurs vendeurs Congo" />
         <link rel="shortcut icon" href="/favicon.jpg" />
@@ -28,7 +28,7 @@ export default function About() {
           <div className="row">
             <div className="col-lg-10 mx-auto">
               <h2 className="section-title" style={{color: '#4CAF50'}}>Notre Histoire</h2>
-              <p className="lead">Fondée en 2025 par Magic & Tech, Somba-Teka est née de la volonté de digitaliser et faciliter les échanges commerciaux au Congo-Brazzaville.</p>
+              <p className="lead">Fondée en 2025 par <a href='https://www.instagram.com/magic_tech023?igsh=MXFib281aDVyd29icw==' style={{color: '#4CAF50'}} >Magic & Tech </a>, Somba-Teka est née de la volonté de digitaliser et faciliter les échanges commerciaux au Congo-Brazzaville.</p>
               <p>Somba-Teka compte s&apos;imposer comme la plateforme de référence pour connecter les professionnels et particuliers souhaitant acheter ou vendre des produits et services.</p>
             </div>
           </div>
@@ -101,7 +101,7 @@ export default function About() {
         <div className="about-card text-center">
           <div className="position-relative mx-auto mb-3" style={{ width: '50%', aspectRatio: '5 / 5', position: 'relative' }}>
             <Image
-              src="/images/prince.jpg"
+              src="https://res.cloudinary.com/dryaemkif/image/upload/v1749447591/oaornxb9hpscvw4ccduu.jpg"
               alt="Prince Moussaki's profile"
               fill
               className="rounded-circle object-fit-cover"
@@ -119,7 +119,7 @@ export default function About() {
         <div className="about-card text-center">
           <div className="position-relative mx-auto mb-3" style={{ width: '50%', aspectRatio: '5 / 5', position: 'relative'  }}>
             <Image
-              src="/images/thercy.jpg"
+              src="https://res.cloudinary.com/dryaemkif/image/upload/v1749447590/zacmjppd0uhyjkdpns4b.jpg"
               alt="Thercy Nold Batantou's profile"
               fill
               className="rounded-circle object-fit-cover"

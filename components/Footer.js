@@ -15,7 +15,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <p>&copy; 2025 SOMBA TEKA. Tous droits réservés.</p>
-          <p className="credits">Designed by Magic & Tech</p>
+          <p className="credits">Designed by <a href="https://www.instagram.com/magic_tech023?igsh=MXFib281aDVyd29icw=="> Magic & Tech </a> </p>
         </div>
       </div>
 
