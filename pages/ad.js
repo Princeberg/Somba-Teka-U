@@ -144,6 +144,8 @@ const AdPage = () => {
                   { src: "/pub/d.jpg", desc: "DIESEL GUCCI CONGO TOUR." },
                   { src: "/pub/t.jpg", desc: "Tournoi de FUSTAL" },
                   { src: "/pub/1.jpg", desc: "SOMBA-TEKA - Achetez et Vendez au Congo-Brazzaville." },
+                  { src: "/pub/2.jpg", desc: "SOMBA-TEKA - Achetez et Vendez au Congo-Brazzaville." },
+                  { src: "/pub/3.jpg", desc: "SOMBA-TEKA - Achetez et Vendez au Congo-Brazzaville." },
                   { src: "/pub/your.jpg", desc: "Formations accessibles à tous niveaux..." },
                   { src: "/pub/mouk.jpg", desc: "Promotion bilan de santé. +242 05 672-32-60" },
                   { src: "/pub/osiane.jpg", desc: "..." },

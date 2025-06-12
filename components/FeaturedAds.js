@@ -38,7 +38,7 @@ export default function FeaturedAds() {
           spaceBetween={20}
           centeredSlides={true}
         >
-          {["concert.jpg", "d.jpg", "osiane.jpg", "t.jpg", "1.jpg"].map((img, index) => (
+          {["concert.jpg", "d.jpg", "osiane.jpg", "2.jpg", "1.jpg", "3.jpg"].map((img, index) => (
             <SwiperSlide key={index}>
               <div className="slide-content">
                 <img

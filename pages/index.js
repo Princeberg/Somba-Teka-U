@@ -13,13 +13,16 @@ const categories = [
   { name: 'Appartement', icon: 'fa-building' },
   { name: 'Maison', icon: 'fa-house' },
   { name: 'Appareil Electronique', icon: 'fa-tv' },
-  { name: 'Mode', icon: 'fa-tshirt' },
+  { name: 'Mode', icon: 'fa-shirt' }, 
   { name: 'Construction', icon: 'fa-hammer' },
   { name: 'Produits Alimentaires', icon: 'fa-apple-whole' },
+  { name: 'Bien-être', icon: 'fa-spa' }, 
+  { name: 'Livre', icon: 'fa-book' },
   { name: 'Décoration intérieure', icon: 'fa-couch' },
-  { name: 'Offre de Service', icon: 'fa-hands-helping' },
-  { name: 'Autre', icon: 'fa-ellipsis-h' },
+  { name: 'Offre de Service', icon: 'fa-handshake' },
+  { name: 'Autre', icon: 'fa-ellipsis' },
 ];
+
 
 function ProductCard({ product }) {
   const router = useRouter();

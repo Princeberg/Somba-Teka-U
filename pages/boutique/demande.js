@@ -243,7 +243,9 @@ export default function AddProductPage() {
                     <option value="Appareil Electronique">Appareil Electronique</option>
                     <option value="Mode">Mode</option>
                     <option value="Construction">Construction</option>
-                    <option value="Produits Alimentaires">Produits Alimentaires</option>
+                    <option value="Produits Alimentaires">Produit Alimentaire </option>
+                     <option value="Bien-être"> Bien-être </option>
+                      <option value="Livre">Livre</option>
                     <option value="Décoration intérieure">Décoration intérieure</option>
                     <option value="Offre de Service">Offre de Service</option>
                     <option value="Autre">Autre</option>
